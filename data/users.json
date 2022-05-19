@@ -1,0 +1,30 @@
+[
+    {
+        "ID" : 20000,
+        "Full Name" : "Administrator",
+        "Email" : "admin@shows.com",
+        "Password" : "justin_bieber",
+        "Admin" : true
+    },
+    {
+        "ID" : 20001,
+        "Full Name" : "Gonçalo Valadão",
+        "Email" : "gvaladao@gmail.com",
+        "Password" : "douSObuebem",
+        "Admin" : false 
+    },
+    {
+        "ID" : 20002,
+        "Full Name" : "João Paulo",
+        "Email" : "jpaulo@gmail.com",
+        "Password" : "souUMpadre", 
+        "Admin" : false
+    },
+    {
+        "ID" : 20003,
+        "Full Name" : "Bruno Vidalgo",
+        "Email" : "bfidalgo@gmail.com",
+        "Password" : "souVidalgoDeCoracao_justkidding_souFidalgoateMorrer",
+        "Admin" : false
+    }
+]
