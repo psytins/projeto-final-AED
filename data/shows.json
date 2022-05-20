@@ -1,0 +1,26 @@
+[
+    {
+        "ID" : 0,
+        "Show Name" : "Os Caricas",
+        "Date" : "03/01/2022",
+        "Capacity" : true,
+        "Description" : "A melhor banda, Sempre!",
+        "Room" : "meter depois com python"
+    },
+    {
+        "ID" : 1,
+        "Show Name" : "Beatles",
+        "Date" : "03/01/2022",
+        "Capacity" : true,
+        "Description" : "We goooood!",
+        "Room" : "meter depois com python"
+    },
+    {
+        "ID" : 2,
+        "Show Name" : "Rui Veloso",
+        "Date" : "03/01/2022",
+        "Capacity" : false,
+        "Description" : "Anel de rubi!",
+        "Room" : "meter depois com python"
+    }
+]
