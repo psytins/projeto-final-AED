@@ -1,6 +1,9 @@
 from tkinter import *
+import controllers.controller as controller
 
-def login_page():
+def login_page(parent=None):
+    if(parent is not None):
+        parent.destroy()
     root = Tk()
     root.title("Show Time! - Login")
     root.geometry("350x350")
@@ -14,10 +17,11 @@ def login_page():
     Entry(root,width=30,borderwidth=2).grid(column=1,row=2)
     #Button
     Button(root,text="Login",width=10,height=2).grid(column=0,row=3)
-    Button(root,text="Register",width=10,height=2,command=register_page).grid(column=1,row=3)
+    Button(root,text="Register",width=10,height=2,command=lambda:register_page(root)).grid(column=1,row=3)
     root.mainloop()
 
-def register_page(): 
+def register_page(parent): 
+    parent.destroy()
     root = Tk()
     root.title("Show Time! - Register")
     root.geometry("350x500")
@@ -35,12 +39,14 @@ def register_page():
     Entry(root,width=30,borderwidth=2).grid(column=1,row=4)
     #Button
     Button(root,text="Register",width=10,height=2).grid(column=0,row=5)
-    Button(root,text="Login",width=10,height=2,command=login_page).grid(column=1,row=5)
+    Button(root,text="Login",width=10,height=2,command=lambda:login_page(root)).grid(column=1,row=5)
     root.mainloop()
+
+def load_json():
+    pass
 
 def main():
     login_page()
-    register_page()
     
 
     
