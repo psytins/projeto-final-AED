@@ -11,7 +11,7 @@ def start():
     model.Show_List = list()
     model.Reservation_List = list()
     #Adicionar elementos do user.json para uma array de objetos
-    f_users = open('./data/users.json')
+    f_users = open('./data/users.json',encoding="utf-8")
     data_users = json.load(f_users)
     for u in data_users:
         temp_user = user.User(u["ID"],u["Full Name"],u["Email"],u["Password"],u["Admin"])
@@ -19,7 +19,7 @@ def start():
         temp_user = None
     f_users.close()
     #Adicionar elementos do shows.json para uma array de objetos
-    f_shows = open('./data/shows.json')
+    f_shows = open('./data/shows.json',encoding="utf-8")
     data_shows = json.load(f_shows)
     for s in data_shows:
         temp_shows = show.Show(s["ID"],s["Show Name"],s["Date"],s["Capacity"],s["Description"],s["Room"])
@@ -27,7 +27,7 @@ def start():
         temp_shows = None
     f_shows.close()
     #Adicionar elementos do reservation.json para um array de objetos
-    f_reservations = open('./data/reservations.json')
+    f_reservations = open('./data/reservations.json',encoding="utf-8")
     data_reservations = json.load(f_reservations)
     for r in data_reservations:
         temp_reservations = reservation.Reservation(r["ID"],r["User ID"],r["User Name"],r["Show ID"],r["Show Name"],r["Type"],r["Price"],r["Seat Number"])
