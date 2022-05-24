@@ -42,9 +42,6 @@ def register_page(parent):
     Button(root,text="Login",width=10,height=2,command=lambda:login_page(root)).grid(column=1,row=5)
     root.mainloop()
 
-def load_json():
-    pass
-
 def main():
     login_page()
     
