@@ -7,7 +7,7 @@
         "Show Name" : "Rui Veloso",
         "Type" : "Normal",
         "Price" : "4,00€",
-        "Seat Number" : 2
+        "Seat Number" : "A0"
     },
     {
         "ID" : "8faa",
@@ -17,7 +17,7 @@
         "Show Name" : "Os Caricas",
         "Type" : "Normal",
         "Price" : "4,00€",
-        "Seat Number" : 5
+        "Seat Number" : "A6"
     },
     {
         "ID" : "ae3a",
@@ -27,7 +27,7 @@
         "Show Name" : "Os Caricas",
         "Type" : "Normal",
         "Price" : "4,00€",
-        "Seat Number" : 6
+        "Seat Number" : "B0"
     },
     {
         "ID" : "02fa",
@@ -37,6 +37,6 @@
         "Show Name" : "Beatles",
         "Type" : "VIP",
         "Price" : "12,00€",
-        "Seat Number" : 8
+        "Seat Number" : "F4"
     }
 ]
