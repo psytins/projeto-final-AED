@@ -18,17 +18,17 @@ class Reservation(object):
     def getUserName(self):
         return self.user_name
 
-    def GetShowID(self):
+    def getShowID(self):
         return self.show_id
 
-    def GetName(self):
+    def getShowName(self):
         return self.show_name
 
-    def GetPrice(self):
+    def getPrice(self):
         return self.price
 
-    def GetSeatNumber(self):
+    def getSeatNumber(self):
         return self.seat_number
 
-    def GetType(self):
+    def getSeatType(self):
         return self.type

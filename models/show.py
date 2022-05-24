@@ -7,22 +7,22 @@ class Show(object):
         self.description = description
         self.room = room
     
-    def GetID(self):
+    def getID(self):
         return self.id
 
-    def GetShowName(self):
+    def getShowName(self):
         return self.show_name
 
-    def GetDate(self):
+    def getDate(self):
         return self.date
 
-    def GetCapacity(self):
+    def getCapacity(self):
         return self.capacity
 
-    def GetDescription(self):
+    def getDescription(self):
         return self.description
 
-    def GetRoom(self):
+    def getRoom(self):
         return self.room
 
     def getSeatNumber(self,room_index : tuple):

@@ -2,41 +2,41 @@
     {
         "ID" : "4ca5",
         "User ID" : 20001,
-        "Username" : "Gonçalo Valadão",
+        "User Name" : "Gonçalo Valadão",
         "Show ID" : 0,
         "Show Name" : "Rui Veloso",
         "Type" : "Normal",
         "Price" : "4,00€",
-        "Seat Number" : 2
+        "Seat Number" : "A0"
     },
     {
-        "ID" : "8gha",
+        "ID" : "8faa",
         "User ID" : 20002,
-        "Username" : "João Paulo",
+        "User Name" : "João Paulo",
         "Show ID" : 1,
         "Show Name" : "Os Caricas",
         "Type" : "Normal",
         "Price" : "4,00€",
-        "Seat Number" : 5
+        "Seat Number" : "A6"
     },
     {
-        "ID" : "8gha",
+        "ID" : "ae3a",
         "User ID" : 20002,
-        "Username" : "João Paulo",
+        "User Name" : "João Paulo",
         "Show ID" : 1,
         "Show Name" : "Os Caricas",
         "Type" : "Normal",
         "Price" : "4,00€",
-        "Seat Number" : 6
+        "Seat Number" : "B0"
     },
     {
-        "ID" : "02hz",
+        "ID" : "02fa",
         "User ID" : 20003,
-        "Username" : "Bruno Vidalgo",
+        "User Name" : "Bruno Vidalgo",
         "Show ID" : 2,
         "Show Name" : "Beatles",
         "Type" : "VIP",
         "Price" : "12,00€",
-        "Seat Number" : 8
+        "Seat Number" : "F4"
     }
 ]

@@ -61,9 +61,6 @@ def user_area():
     Label(root, text="Preço do Bilhete:", font=("Arial", 9), justify="right").grid(row=6, column=0, sticky=W)
     root.mainloop()
 
-def load_json():
-    pass
-
 def main():
     #login_page()
     user_area()
