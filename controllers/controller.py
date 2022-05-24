@@ -29,11 +29,11 @@ def start():
     f_reservations = open('./data/reservations.json')
     data_reservations = json.load(f_reservations)
     for r in data_reservations:
-        temp_reservations = reservation.Reservation(r["ID"],r["User ID"],r["Username"],r["Show ID"],r["Show Name"],r["Type"],r["Price"],r["Seat Number"])
+        temp_reservations = reservation.Reservation(r["ID"],r["User ID"],r["User Name"],r["Show ID"],r["Show Name"],r["Type"],r["Price"],r["Seat Number"])
         model.Reservation_List.append(temp_reservations)
         temp_reservations = None
     f_reservations.close()
-
+    
 def save():
     model.User_List = list()        #temp
     model.Reservation_List = list() #temp
