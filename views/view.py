@@ -1,15 +1,19 @@
 from operator import ne
 from tkinter import *
+from tkinter import messagebox
+from PIL import ImageTk,Image
 from turtle import st
+import tkinter as tk
 import controllers.controller as controller
-#from PIL import ImageTk,Image
+
+background="#a6c8e0"
 
 def login_page(parent=None):
     if(parent is not None):
         parent.destroy()
     root = Tk()
     root.title("Show Time! - Login")
-    root.geometry("350x350")
+    root.geometry("350x300")
     root.resizable(False,False)
     Label(root, text="Welcome to Show Time!", padx=10,pady=10).grid(column=0,row=0, sticky=W)
     #Email
@@ -46,52 +50,74 @@ def register_page(parent):
     root.mainloop()
 
 def user_area():
-    
-    #parent.destroy()
     root = Tk()
     root.title("Show Time! - Área do utilizador")
     root.geometry("700x500")
     root.resizable(False,False)
+    root.config(bg=background)
+    
     #texto
-    Label(root, text="Os seus Bilhetes", font=("Arial", 14), background="gray").grid(row=0, column=0)
-    #separaçao linha
-    Label(root, text=" ").grid(row=1, column=0)
-    #info dos bilhetes
-    Label(root, text="Nome do Espetáculo:", font=("Arial", 9), justify="right").grid(row=2, column=0, sticky=W)
-    Label(root, text="Data do Espetáculo:", font=("Arial", 9), justify="right").grid(row=3, column=0, sticky=W)
-    Label(root, text="Tipo de bilhete:", font=("Arial", 9), justify="right").grid(row=4, column=0, sticky=W)
-    Label(root, text="Número de Bilhetes:", font=("Arial", 9), justify="right").grid(row=5, column=0, sticky=W)
-    Label(root, text="Lugar:", font=("Arial", 9), justify="right").grid(row=6, column=0, sticky=W)
-    Label(root, text="Preço do Bilhete:", font=("Arial", 9), justify="right").grid(row=7, column=0, sticky=W)
-    #separacoes linhas
-    Label(root, text=" ").grid(row=8, column=0)
-    Label(root, text=" ").grid(row=9, column=0)
-    #info dos bilhetes 2
-    Label(root, text="Nome do Espetáculo:", font=("Arial", 9), justify="right").grid(row=10, column=0, sticky=W)
-    Label(root, text="Data do Espetáculo:", font=("Arial", 9), justify="right").grid(row=11, column=0, sticky=W)
-    Label(root, text="Tipo de bilhete:", font=("Arial", 9), justify="right").grid(row=12, column=0, sticky=W)
-    Label(root, text="Número de Bilhetes:", font=("Arial", 9), justify="right").grid(row=13, column=0, sticky=W)
-    Label(root, text="Lugar:", font=("Arial", 9), justify="right").grid(row=14, column=0, sticky=W)
-    Label(root, text="Preço do Bilhete:", font=("Arial", 9), justify="right").grid(row=15, column=0, sticky=W)
-    #separacoes colunas
-    Label(root, text="            ").grid(row=0, column=1)
-    Label(root, text="            ").grid(row=1, column=2)
-    Label(root, text="            ").grid(row=2, column=3)
-    Label(root, text="            ").grid(row=3, column=4)
-    Label(root, text="            ").grid(row=4, column=5)
-    Label(root, text="            ").grid(row=5, column=6)
-    Label(root, text="            ").grid(row=6, column=7)
-    Label(root, text="            ").grid(row=7, column=8)
-    Label(root, text="            ").grid(row=8, column=9)
-    #nome do user
-    Label(root, text="User:", font=("Arial", 9), justify="right").grid(row=8, column=9, sticky=NE)
-    #imagem perfil VER COMO FZR
-    #ImageTk(root, file="perfil.ppm").grid(row=0, column= 10, sticky=E)
-    #perfil = PhotoImage(file="./data/perfil.ppm") // , image=perfil,
-    #botao logout
-    Button(root,text="Log Out",width=10,height=2, font=("Arial", 9, "bold"), justify="right", background="red").grid(column=20,row=9, sticky=NE)
-    root.mainloop()
+    Label(root, text="Informações", font=("Verdana", 16), background="#7eb6de").grid(row=0, column=0, sticky=W)
 
+    #pop up da info dos bilhetes
+    def clicker():
+        global pop
+        pop = Toplevel(root)
+        pop.title("Informações!")
+        pop.geometry("400x200")
+        pop.config(bg=background)
+        
+        pop_label1 = Label(pop, text="Nome do Espetáculo:", font=("Arial", 9), bg=background).grid(row=0, column=0, sticky=W)
+        pop_label2 = Label(pop, text="Data do Espetáculo:", font=("Arial", 9), bg=background).grid(row=1, column=0, sticky=W)
+        pop_label3 = Label(pop, text="Tipo de bilhete:", font=("Arial", 9), bg=background).grid(row=2, column=0, sticky=W)
+        pop_label4 = Label(pop, text="Número de Bilhetes:", font=("Arial", 9), bg=background).grid(row=3, column=0, sticky=W)
+        pop_label5 = Label(pop, text="Lugar:", font=("Arial", 9), bg=background).grid(row=4, column=0, sticky=W)
+        pop_label6 = Label(pop, text="Preço do Bilhete:", font=("Arial", 9), bg=background).grid(row=5, column=0, sticky=W)
+        pop_label7 = Label(pop, text=" ", bg=background).grid(row=6, column=0)
+        cancel = Button(pop, text="Cancel.", command = lambda: choice("cancel"), bg="gray")
+        cancel.grid(row=7, column=2)
+        
+    def choice(option):
+        pop.destroy()
+        if option == "cancel":
+            pop.destroy()
+    #botao na area do user q mostra os bilhetes
+    Button(root, text="Bilhetes", command=clicker, width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=0, row=3)
+    
+    #separacoes linhas
+    Label(root, text=" ", bg=background).grid(row=8, column=0)
+    Label(root, text=" ", bg=background).grid(row=9, column=0)
+    
+    #separacoes colunas !!!!!!!!POR FAVOR ARRANJAR OUTRA FORMA DE FAZER A SEPARACAO COM COLUNAS !!!!!!!!!!!
+    Label(root, text="                                                               ", bg=background).grid(row=0, column=3)
+    Label(root, text="                                                               ", bg=background).grid(row=1, column=3)
+    Label(root, text="                                                               ", bg=background).grid(row=2, column=3)
+    Label(root, text="                                                               ", bg=background).grid(row=3, column=3)
+    Label(root, text="                                                               ", bg=background).grid(row=4, column=3)
+    Label(root, text="                                                                                              ", bg=background).grid(row=5, column=3)
+    #nome do user
+    Label(root, text="User:", font=("Arial", 9), justify="right", bg=background).grid(row=4, column=9, sticky=NE)
+    #imagem teatro
+    #my_img = ImageTk.PhotoImage(Image.open("./data/espetaculos.jpg"))
+    #my_label = Label(root, image=my_img, height=250, width=350).grid(row=5, column=0)
+    #botao logout
+    Button(root,text="Log Out",width=10,height=2, font=("Arial", 9, "bold"), background="red", command=root.quit).grid(column=20,row=5)
+    #separacoes das linhas
+    Label(root, text=" ", bg=background).grid(row=6, column=0)
+    Label(root, text=" ", bg=background).grid(row=7, column=0)
+    Label(root, text=" ", bg=background).grid(row=8, column=0)
+    Label(root, text=" ", bg=background).grid(row=9, column=0)
+    Label(root, text=" ", bg=background).grid(row=10, column=0)
+    Label(root, text=" ", bg=background).grid(row=11, column=0)
+    Label(root, text=" ", bg=background).grid(row=12, column=0)
+    Label(root, text=" ", bg=background).grid(row=13, column=0)
+    Label(root, text=" ", bg=background).grid(row=14, column=0)
+    Label(root, text=" ", bg=background).grid(row=15, column=0)
+    Label(root, text=" ", bg=background).grid(row=16, column=0)
+    
+    #botao pagina principal
+    Button(root, text="Página Principal", width=12, height=2, bg="#50616e", command=root.quit).grid(row=14, column=20)
+    root.mainloop()
 def main():
     #login_page()
     user_area()
