@@ -30,16 +30,13 @@ def start():
     f_reservations = open('./data/reservations.json',encoding="utf-8")
     data_reservations = json.load(f_reservations)
     for r in data_reservations:
-        temp_reservations = reservation.Reservation(r["ID"],r["User ID"],r["User Name"],r["Show ID"],r["Show Name"],r["Type"],r["Price"],r["Seat Number"])
+        temp_reservations = reservation.Reservation(r["ID"],r["User ID"],r["User Name"],r["Show ID"],r["Show Name"],r["Price"],r["Seat Number"],r["Type"])
         model.Reservation_List.append(temp_reservations)
         temp_reservations = None
     f_reservations.close()
 #Função utilizada quando se termina o programa
 #Esta função vai carrregar todos os dados das listas globais (model) nos ficheiros JSON
 def save():
-    model.User_List = list()        #temp
-    model.Reservation_List = list() #temp
-    model.Show_List = list()        #temp
     # --------------
     # pegar na lista de objectos (objeto em json -> dict em python)
     # converter cada objecto num objecto python-json 
@@ -58,7 +55,7 @@ def save():
         user_json.append(temp_dict_users)
     load_json = json.dumps(user_json)
     #Write in json file
-    with open("./data/test_user.json","w") as file: # TEMPORARY FILE IS LOADED!
+    with open("./data/users.json","w") as file:
         file.write(load_json)
         file.close()
     #######################################################
@@ -75,7 +72,7 @@ def save():
         show_json.append(temp_dict_shows)
     load_json = json.dumps(show_json)
     #Write in json file
-    with open("./data/test_show.json","w") as file: # TEMPORARY FILE IS LOADED!
+    with open("./data/shows.json","w") as file:
         file.write(load_json)
         file.close()       
     #######################################################
@@ -88,12 +85,12 @@ def save():
         temp_dict_reservations["User Name"] = reservations.getUserName()
         temp_dict_reservations["Show ID"] = reservations.getShowID()
         temp_dict_reservations["Show Name"] = reservations.getShowName()
-        temp_dict_reservations["Type"] = reservations.SeatType()
+        temp_dict_reservations["Type"] = reservations.getSeatType()
         temp_dict_reservations["Price"] = reservations.getPrice()
         temp_dict_reservations["Seat Number"] = reservations.getSeatNumber()
         reservation_json.append(temp_dict_reservations)
     load_json = json.dumps(reservation_json)
     #Write in json file
-    with open("./data/test_reservation.json","w") as file: # TEMPORARY FILE IS LOADED!
+    with open("./data/reservations.json","w") as file:
         file.write(load_json)
         file.close()  
