@@ -93,4 +93,20 @@ def save():
     #Write in json file
     with open("./data/reservations.json","w") as file:
         file.write(load_json)
-        file.close()  
+        file.close()
+
+#Esta função vai retornar ids que não existam registados para novos registos
+def create_id():
+    tmp_verify = []
+    id_verify = 20000
+    #adicionei os ids existentes a uma lista temporaria
+    for x in range(len(model.User_List)):
+        tmp_verify.append(model.User_List[x].getID())
+    #aqui verifiquei se os ids existiam ou não na lista temporária criada
+    if id_verify not in tmp_verify:
+        return id_verify
+    else:
+        for i in range(len(tmp_verify)):
+            if id_verify == tmp_verify[i]:
+                id_verify += 1
+        return id_verify
