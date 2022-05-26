@@ -110,3 +110,22 @@ def create_id():
             if id_verify == tmp_verify[i]:
                 id_verify += 1
         return id_verify
+
+#FALTA TESTAR A FUNCAO E PERCEBER SE É ESTA A MANEIRA CERTA DE SE FAZER
+def register_user(name, email, password):
+    temp_dict_users = dict()
+    temp_emails = []
+    user_id = create_id()
+    temp_dict_users["ID"] = user_id
+    temp_dict_users["Full Name"] = name
+    for x in range(len(model.User_List)):
+        temp_emails.append(model.User_List[x].getEmail())
+    # neste if ao retornar -1 vamos adicionar que ja existe o mail registado
+    if email in temp_emails:
+        return -1
+    temp_dict_users["Email"] = email
+    temp_dict_users["Password"] = password
+    temp_dict_users["Admin"] = False
+    model.User_List.append(temp_dict_users)
+    print(model.User_List)
+
