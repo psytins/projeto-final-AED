@@ -95,8 +95,8 @@ def save():
         file.write(load_json)
         file.close()
 
-#Esta função vai retornar ids que não existam registados para novos registos
-def create_id():
+#Esta função vai retornar ids que não existam registados para novos registos de utilizador
+def create_user_id():
     tmp_verify = []
     id_verify = 20000
     #adicionei os ids existentes a uma lista temporaria
@@ -111,11 +111,26 @@ def create_id():
                 id_verify += 1
         return id_verify
 
-#FALTA TESTAR A FUNCAO E PERCEBER SE É ESTA A MANEIRA CERTA DE SE FAZER
-def register_user(name, email, password):
+# Esta função vai retornar ids que não existam registados para novos registos da reserva feita pelo utilizador
+def create_reservation_id():
+    tmp_verify = []
+    id_verify = 100
+    #adicionei os ids existentes a uma lista temporaria
+    for x in range(len(model.Reservation_List)):
+        tmp_verify.append(model.Reservation_List[x].getID())
+    #aqui verifiquei se os ids existiam ou não na lista temporária criada
+    if id_verify not in tmp_verify:
+        return id_verify
+    else:
+        for i in range(len(tmp_verify)):
+            if id_verify == tmp_verify[i]:
+                id_verify += 1
+        return id_verify 
+
+def registrate_user(name, email, password):
     temp_dict_users = dict()
     temp_emails = []
-    user_id = create_id()
+    user_id = create_user_id()
     temp_dict_users["ID"] = user_id
     temp_dict_users["Full Name"] = name
     for x in range(len(model.User_List)):
@@ -127,5 +142,22 @@ def register_user(name, email, password):
     temp_dict_users["Password"] = password
     temp_dict_users["Admin"] = False
     model.User_List.append(temp_dict_users)
-    print(model.User_List)
 
+#Ver se é preciso passar estes parâmetros na função order_tickets
+# VER ONDE CRÍAMOS O CONTROLO PARA VER SE O SEAT ESTÁ OCUPADO OU NÃO:
+def order_tickets(user_id, user_name, show_id, show_name, show_type, price, seat_number):
+    #criei um dicionário temporário para adicionar os parâmetros das reservas
+    temp_dict_reservations = dict()
+    #criei um id para a reserva
+    reservation_id = create_reservation_id()
+    #adicionar os parâmetros da reserva para um dicionário temporário
+    temp_dict_reservations["ID"] = reservation_id
+    temp_dict_reservations["User ID"] = user_id
+    temp_dict_reservations["User Name"] = user_name
+    temp_dict_reservations["Show ID"] = show_id
+    temp_dict_reservations["Show Name"] = show_name
+    temp_dict_reservations["Type"] = show_type
+    temp_dict_reservations["Price"] = price
+    temp_dict_reservations["Seat Number"] = seat_number
+    # aqui vamos adicionar as características da reserva para o json das reservas.
+    model.Reservation_List.append(temp_dict_reservations)
