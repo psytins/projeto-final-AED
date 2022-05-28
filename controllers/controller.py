@@ -128,36 +128,40 @@ def create_reservation_id():
         return id_verify 
 
 def registrate_user(name, email, password):
-    temp_dict_users = dict()
     temp_emails = []
     user_id = create_user_id()
-    temp_dict_users["ID"] = user_id
-    temp_dict_users["Full Name"] = name
     for x in range(len(model.User_List)):
         temp_emails.append(model.User_List[x].getEmail())
-    # neste if ao retornar -1 vamos adicionar que ja existe o mail registado
+    # neste if ao retornar -1 vamos adicionar que ja existe o mail registado ! Update Gonçalo: A maneira de verificar o email pode ser feito de outra maneira de modo a melhorar a performance.
     if email in temp_emails:
         return -1
-    temp_dict_users["Email"] = email
-    temp_dict_users["Password"] = password
-    temp_dict_users["Admin"] = False
-    model.User_List.append(temp_dict_users)
+    temp_user_obj = user.User(user_id,name,email,password,False)
+    model.User_List.append(temp_user_obj)
+
+def authenticate_user(email,password):
+    curr_user = None
+    for users in model.User_List:
+        if(users.getEmail() == email):
+            curr_user = users
+    if(curr_user == None): return 0 #User don't exist
+    if(curr_user.getPassword() == password): return 1 #Auth completed
+    else: return -1 #Password don't match
 
 #Ver se é preciso passar estes parâmetros na função order_tickets
+# A partir do user id e show id temos acesso ao resto, não é preciso ter mais parâmetros
 # VER ONDE CRÍAMOS O CONTROLO PARA VER SE O SEAT ESTÁ OCUPADO OU NÃO:
-def order_tickets(user_id, user_name, show_id, show_name, show_type, price, seat_number):
-    #criei um dicionário temporário para adicionar os parâmetros das reservas
-    temp_dict_reservations = dict()
+def order_tickets(user_id, show_id, show_type, price, seat_number):
+    curr_user = None
+    curr_show = None
+    for users in model.User_List:
+        if(users.getID() == user_id):
+            curr_user = users
+    for shows in model.Show_List:
+        if(shows.getID() == show_id):
+            curr_show = shows
     #criei um id para a reserva
     reservation_id = create_reservation_id()
-    #adicionar os parâmetros da reserva para um dicionário temporário
-    temp_dict_reservations["ID"] = reservation_id
-    temp_dict_reservations["User ID"] = user_id
-    temp_dict_reservations["User Name"] = user_name
-    temp_dict_reservations["Show ID"] = show_id
-    temp_dict_reservations["Show Name"] = show_name
-    temp_dict_reservations["Type"] = show_type
-    temp_dict_reservations["Price"] = price
-    temp_dict_reservations["Seat Number"] = seat_number
+    #Criar objecto
+    temp_reservation_obj = reservation.Reservation(reservation_id,user_id,curr_user.getName(),show_id,curr_show.getName(),price,seat_number,show_type)
     # aqui vamos adicionar as características da reserva para o json das reservas.
-    model.Reservation_List.append(temp_dict_reservations)
+    model.Reservation_List.append(temp_reservation_obj)
