@@ -59,6 +59,9 @@ def user_area():
     #texto
     Label(root, text="Informações", font=("Verdana", 16), background="#7eb6de").grid(row=0, column=0, sticky=W)
 
+    #dropdown 
+
+
     #pop up da info dos bilhetes
     def clicker():
         global pop
@@ -76,13 +79,13 @@ def user_area():
         pop_label7 = Label(pop, text=" ", bg=background).grid(row=6, column=0)
         cancel = Button(pop, text="Cancel.", command = lambda: choice("cancel"), bg="gray")
         cancel.grid(row=7, column=2)
-        
+
     def choice(option):
         pop.destroy()
         if option == "cancel":
             pop.destroy()
     #botao na area do user q mostra os bilhetes
-    Button(root, text="Bilhetes", command=clicker, width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=0, row=3)
+    Button(root, text="Bilhetes", command=dropdown, width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=0, row=3)
     
     #separacoes linhas
     Label(root, text=" ", bg=background).grid(row=8, column=0)
@@ -117,6 +120,7 @@ def user_area():
     
     #botao pagina principal
     Button(root, text="Página Principal", width=12, height=2, bg="#50616e", command=root.quit).grid(row=14, column=20)
+
     root.mainloop()
 def main():
     #login_page()
