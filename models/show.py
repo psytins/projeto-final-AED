@@ -27,3 +27,11 @@ class Show(object):
 
     def getSeatNumber(self,room_index : tuple):
         pass
+
+    def getSeatCount(self):
+        counter = 0
+        for seats_l in self.room:
+            for seats_c in seats_l:
+                if(seats_c == "N1" or seats_c == "v1"):
+                    counter += 1
+        return counter
