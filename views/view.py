@@ -125,6 +125,112 @@ def user_area():
     Button(root, text="Página Principal", width=12, height=2, bg="#50616e", command=root.quit).grid(row=14, column=20)
 
     root.mainloop()
+
+# Menu temporário para testar as funcionalidades ###########################################
+############################################################################################
+############################################################################################
+############################################################################################
+def temp_main_menu():
+    print("Indique uma opção\n")
+    print("\t1) Registar Utilizador\n")
+    print("\t2) Entrar como Utilizador Existente\n")
+    print("\t3) Ver Espetáculos\n")
+    print("\t4) Sair\n") 
+    return int(input("Opção: "))
+
+def temp_login():
+    print("Iniciar Sessão\n")
+    email = input("\tEmail: ")
+    password = input("\tPassword: ")
+    return controller.authenticate_user(email,password)
+
+def temp_register():
+    print("Registar Sessão\n")
+    nome = input("\tNome Completo: ")
+    email = input("\tEmail: ")
+    password = input("\tPassword: ")
+    return controller.registrate_user(nome,email,password)
+
+def temp_user_area(user):
+    print(f"Bem-vindo {user.getFullName()} à area de utilizador\n")
+    print("As suas reservas:\n")
+    #Ver todas as reservas com o ID deste utilizador
+    for reservations in controller.model.Reservation_List:
+        if(user.getID() == reservations.getUserID()):
+            print(f"\t Reserva número {reservations.getID()}\n")
+    return int(input("Escreva 1 para encerrar sessão OU 2 para ver espetáculos: "))
+
+def temp_show(user):
+    if(user == None): print("Sem sessão iniciada\n")
+    else: print(f"Bem-vindo aos espetaculos {user.getFullName()}\n")
+    for shows in controller.model.Show_List:
+        print(f"Espetáculo {shows.getID()} - {shows.getShowName()}\n")
+        print(f"\tData do espetáculo: {shows.getDate()}\n")
+        if(shows.getCapacity()): print("\tEste espetáculo tem a lotação máxima\n")
+        else: print(f"\tEste espetáculo tem {(shows.getSeatCount()/142) * 100}% da lotação máxima\n") # 142 é o espaço total de cada sala
+        print(f"\tDescrição: {shows.getDescription()}\n")
+        print(f"\tSala:")
+        temp_show_room(shows.getRoom())
+        print("\n")
+    return int(input("Escreva 1 para voltar ao menu principal: "))
+
+def temp_show_room(room):
+    for l in room:
+        for c in l:
+            if(c == "N0"):
+                print("[ ]",end="") 
+            elif(c == "N1"):
+                print("[ x ]",end="") 
+            elif(c == "V0"):
+                print("[VIP]",end="")
+            elif(c == "V1"):
+                print("[ x ]",end="") 
+            elif(c == "NA"):
+                print(" ",end="")
+        print("\n")
+
+
+def temp_menu():
+    controller.start()
+    session = None
+    menu = 0 
+    while(1):
+        if(menu == 0): 
+            menu = temp_main_menu()
+        elif(menu == 1): 
+            register = temp_register()
+            if(register == 0):
+                print("O email já existe!")
+                menu = 0
+            elif(register == 1):
+                print("Registo feito com sucesso! Por favor inicie sessão com o seu email e password")
+                menu = 0
+        elif(menu == 2):
+            login = temp_login()
+            if(login == 0):
+                print("O utilizador não existe")
+                menu = 0
+            elif(login == -1):
+                print("Password errada")
+                menu = 0
+            else:
+                print(f"Bem-vindo {login.getFullName()}")
+                session = login
+                menu = 5
+        elif(menu == 3):
+            if(temp_show(session) == 1):
+                menu = 0
+        elif(menu == 4):
+            #controller.save()
+            break
+        elif(menu == 5):
+            option = temp_user_area(session)
+            if(option == 1): 
+                session = None
+                menu = 0
+            elif(option == 2):
+                menu = 3 
+            
+
 def main():
-    #login_page()
-    user_area()
+    temp_menu()
