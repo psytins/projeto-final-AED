@@ -7,7 +7,7 @@ class Reservation(object):
         self.show_name = show_name
         self.price = price
         self.seat_number = seat
-        self.show_type = type
+        self.show_type = show_type
 
     def getID(self):
         return self.id
