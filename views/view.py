@@ -5,6 +5,7 @@ from PIL import ImageTk,Image
 from turtle import st
 import tkinter as tk
 import controllers.controller as controller
+import models.model as model
 
 background="#a6c8e0"
 
@@ -77,7 +78,7 @@ def user_area():
         pop_label5 = Label(pop, text="Lugar:", font=("Arial", 9), bg=background).grid(row=4, column=0, sticky=W)
         pop_label6 = Label(pop, text="Preço do Bilhete:", font=("Arial", 9), bg=background).grid(row=5, column=0, sticky=W)
         pop_label7 = Label(pop, text=" ", bg=background).grid(row=6, column=0)
-        cancel = Button(pop, text="Cancel.", command = lambda: choice("cancel"), bg="gray")
+        cancel = Button(pop, text="Cancel", command = lambda: choice("cancel"), bg="gray")
         cancel.grid(row=7, column=2)
 
     def choice(option):
@@ -85,7 +86,9 @@ def user_area():
         if option == "cancel":
             pop.destroy()
     #botao na area do user q mostra os bilhetes
-    Button(root, text="Bilhetes", command=dropdown, width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=0, row=3)
+    #porque é que no command = dropdown?
+    #alterei o dropdown para clicker
+    Button(root, text="Bilhetes", command=clicker, width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=0, row=3)
     
     #separacoes linhas
     Label(root, text=" ", bg=background).grid(row=8, column=0)
