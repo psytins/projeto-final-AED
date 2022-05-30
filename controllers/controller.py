@@ -22,7 +22,17 @@ def start():
     f_shows = open('./data/shows.json',encoding="utf-8")
     data_shows = json.load(f_shows)
     for s in data_shows:
-        temp_shows = show.Show(s["ID"],s["Show Name"],s["Date"],s["Capacity"],s["Description"],s["Room"])
+        final_room = list()
+        room_line = list()
+        col = 0
+        for room in range(len(s["Room"])):
+            room_line.append(s["Room"][room])
+            col += 1
+            if(col == 14): 
+                final_room.append(room_line)
+                room_line = list()
+                col = 0
+        temp_shows = show.Show(s["ID"],s["Show Name"],s["Date"],s["Description"],final_room)
         model.Show_List.append(temp_shows)
         temp_shows = None
     f_shows.close()
@@ -68,7 +78,13 @@ def save():
         temp_dict_shows["Date"] = shows.getDate()
         temp_dict_shows["Capacity"] = shows.getCapacity() 
         temp_dict_shows["Description"] = shows.getDescription()
-        temp_dict_shows["Room"] = shows.getRoom()
+        #Format room list to json
+        room_list = shows.getRoom()
+        json_room_list = list()
+        for l in room_list:
+            for c in l:
+                json_room_list.append(c)
+        temp_dict_shows["Room"] = json_room_list
         show_json.append(temp_dict_shows)
     load_json = json.dumps(show_json)
     #Write in json file
@@ -134,9 +150,10 @@ def registrate_user(name, email, password):
         temp_emails.append(model.User_List[x].getEmail())
     # neste if ao retornar -1 vamos adicionar que ja existe o mail registado ! Update Gonçalo: A maneira de verificar o email pode ser feito de outra maneira de modo a melhorar a performance.
     if email in temp_emails:
-        return -1
+        return 0
     temp_user_obj = user.User(user_id,name,email,password,False)
     model.User_List.append(temp_user_obj)
+    return 1
 
 def authenticate_user(email,password):
     curr_user = None
@@ -144,7 +161,7 @@ def authenticate_user(email,password):
         if(users.getEmail() == email):
             curr_user = users
     if(curr_user == None): return 0 #User don't exist
-    if(curr_user.getPassword() == password): return 1 #Auth completed
+    if(curr_user.getPassword() == password): return curr_user #Auth completed
     else: return -1 #Password don't match
 
 #Ver se é preciso passar estes parâmetros na função order_tickets
@@ -166,6 +183,7 @@ def order_tickets(user_id, show_id, show_type, price, seat_number):
     # aqui vamos adicionar as características da reserva para o json das reservas.
     model.Reservation_List.append(temp_reservation_obj)
 
+# O clear order vai apagar a reservation com o id respectivo e vai libertar um espaço na matriz no seat number respectivo do show respectivo
 def clear_order(show_id, seat_number):
     # Penso que não precisamos do user_id como parâmetro pois temos a função login implementada
     for i in range(len(model.Show_List)):
