@@ -165,3 +165,16 @@ def order_tickets(user_id, show_id, show_type, price, seat_number):
     temp_reservation_obj = reservation.Reservation(reservation_id,user_id,curr_user.getName(),show_id,curr_show.getName(),price,seat_number,show_type)
     # aqui vamos adicionar as características da reserva para o json das reservas.
     model.Reservation_List.append(temp_reservation_obj)
+
+def clear_order(show_id, seat_number):
+    # Penso que não precisamos do user_id como parâmetro pois temos a função login implementada
+    for i in range(len(model.Show_List)):
+        if show_id == model.Show_List[i].getID():
+            for x in range(len(model.Reservation_List)):
+                if seat_number == model.Reservation_List[x].getSeatNumber():
+                    model.Reservation_List.pop(x)
+                    print(model.Reservation_List)
+                    return 1
+                else:
+                    #mudar o return para um erro de não existir o show pedido
+                    return -1
