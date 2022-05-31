@@ -25,7 +25,7 @@ def start():
         final_room = list()
         room_line = list()
         col = 0
-        for room in range(len(s["Room"])):
+        for room in range(len(s["Room"])): #criar uma matriz segundo o array que está no json
             room_line.append(s["Room"][room])
             col += 1
             if(col == 14): 
@@ -142,15 +142,12 @@ def create_reservation_id():
             if id_verify == tmp_verify[i]:
                 id_verify += 1
         return id_verify 
-
+#Registar novo utilizador
 def registrate_user(name, email, password):
-    temp_emails = []
     user_id = create_user_id()
-    for x in range(len(model.User_List)):
-        temp_emails.append(model.User_List[x].getEmail())
-    # neste if ao retornar -1 vamos adicionar que ja existe o mail registado ! Update Gonçalo: A maneira de verificar o email pode ser feito de outra maneira de modo a melhorar a performance.
-    if email in temp_emails:
-        return 0
+    for u in model.User_List:
+        if(email == u.getEmail()):
+            return 0 # Verificar se o email já existe 
     temp_user_obj = user.User(user_id,name,email,password,False)
     model.User_List.append(temp_user_obj)
     return 1
