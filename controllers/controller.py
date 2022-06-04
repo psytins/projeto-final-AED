@@ -150,7 +150,7 @@ def registrate_user(name, email, password):
             return 0 # Verificar se o email já existe 
     temp_user_obj = user.User(user_id,name,email,password,False)
     model.User_List.append(temp_user_obj)
-    return 1
+    return temp_user_obj
 
 def authenticate_user(email,password):
     curr_user = None
