@@ -1,10 +1,12 @@
+from operator import indexOf
 from tkinter import *
 from tkinter import messagebox
+from traceback import print_tb
 from PIL import ImageTk,Image
 import controllers.controller as controller
 import models.model as model
 
-background="#a6c8e0"
+background="#bbbbbb"
 
 def autenticate_user(parent,email,password):
     auth = controller.authenticate_user(email,password)
@@ -22,9 +24,8 @@ def registrate_user(parent,email,name,password):
     else:
         user_area(parent,control)
 
-def login_page(parent=None):
-    if(parent is not None):
-        parent.destroy()
+def login_page(parent):
+    parent.destroy()
     root = Tk()
     root.title("Show Time! - Login")
     root.geometry("350x300")
@@ -136,10 +137,107 @@ def user_area(parent,session):
     Button(root,text="Log Out",width=10,height=2, font=("Arial", 9, "bold"), background="red", command=lambda:login_page(root)).grid(column=0,row=5, sticky=W)
 
     #botao pagina principal
-    Button(root, text="Ver Espetáculos", width=12, height=2, bg="#50616e", command=root.quit).grid(row=6, column=0,sticky=W)
+    Button(root, text="Ver Espetáculos", width=12, height=2, bg="#50616e", command=lambda:show_area(root,session)).grid(row=6, column=0,sticky=W)
 
     root.mainloop()
 
+
+def show_area(parent=None,session=None):
+    if(parent is not None):
+        parent.destroy()
+    root = Tk()
+    root.title(f"Show Time! - Ver Espetáculo")
+    root.geometry("700x500")
+    root.resizable(False,False)
+    root.config(bg=background)
+    #texto
+    Label(root, text="Escolha o espetáculo que queira ver", font=("Verdana", 16), background="#7eb6de").grid(row=0, column=0, sticky=W)
+    #dropdown 
+    #Get shows 
+    SHOW = list()
+    for shows in controller.model.Show_List:
+        SHOW.append(f"#{shows.getID()} - {shows.getShowName()} [{shows.getDate()}]")
+    options = StringVar(root)
+    if(len(SHOW) == 0): 
+        options.set("None")
+        option_menu = OptionMenu(root, options,"None")
+    else: 
+        options.set(SHOW[0]) # default value
+        option_menu = OptionMenu(root, options, *SHOW)
+    option_menu.grid(row=1,column=0,sticky=W)
+
+    def order(seat_number):
+        global pop_order
+        pop_order = Toplevel(pop)
+        pop_order.title(seat_number)
+        pop_order.geometry("300x300")
+        pop_order.config(bg=background)
+        cancel = Button(pop_order, text="Cancel", command = lambda: choice("cancel"), bg="gray")
+        cancel.grid(row=20, column=3)
+
+    def show_room(show):
+        room = show.getRoom()
+        for l in range(len(room)):
+            for c in range(len(room[l])): ## Tá bugado
+                if(room[l][c] == "N0"):
+                    seat_number = show.getSeatNumber((l,c))
+                    Button(pop,text=" ",padx=16,pady=2,command=lambda:order(seat_number)).grid(column=c+5,row=l+5)
+                elif(room[l][c] == "N1"):
+                    Button(pop,text=" ",bg='red',padx=16,pady=2,state=DISABLED).grid(column=c+5,row=l+5)
+                elif(room[l][c] == "V0"):
+                    seat_number = show.getSeatNumber((l,c))
+                    Button(pop,text="VIP",padx=10,pady=2,command=lambda:order(seat_number)).grid(column=c+5,row=l+5)
+                elif(room[l][c] == "V1"):
+                    Button(pop,text="VIP",bg='red',padx=10,pady=2,state=DISABLED).grid(column=c+5,row=l+5)
+                elif(room[l][c] == "NA"):
+                    pass
+
+    #pop up da info dos bilhetes
+    def clicker():
+        if(options.get() != "None"):
+            global pop
+            pop = Toplevel(root) # Criar uma página em cima da página atual
+            show_id = int(options.get()[1:(indexOf(options.get(),"-")-1)])
+            curr_show = None #Show Object
+            for shows in controller.model.Show_List:
+                if(shows.getID() == show_id):
+                    curr_show = shows
+            pop.title(f"Informação de Espetáculo - #{curr_show.getID()}")
+            pop.geometry("900x600")
+            pop.config(bg=background)
+            pop_label1 = Label(pop, text=f"Nome do Espetáculo: {curr_show.getShowName()}", font=("Arial", 9), bg=background).grid(row=0, column=0, sticky=W)
+            pop_label2 = Label(pop, text=f"Data do Espetáculo: {curr_show.getDate()}", font=("Arial", 9), bg=background).grid(row=1, column=0, sticky=W)
+            pop_label5 = Label(pop, text=f"Descrição: {curr_show.getDescription()}", font=("Arial", 9), bg=background).grid(row=2, column=0, sticky=W)
+            if(session == None):
+                pop_label6 = Label(pop, text=f"Inicie sessão para reservar bilhetes", font=("Arial", 9), bg=background).grid(row=3, column=0, sticky=W)
+            else:
+                show_room(curr_show)
+            cancel = Button(pop, text="Cancel", command = lambda: choice("cancel"), bg="gray")
+            cancel.grid(row=20, column=3)
+    
+    def choice(option):
+        pop.destroy()
+        if option == "cancel":
+            pop.destroy()
+    #botao na area do user q mostra os bilhetes
+    #porque é que no command = dropdown?
+    #alterei o dropdown para clicker
+    Button(root, text="Ver Espetáculo", command=clicker, width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=0, row=2)
+    
+    #nome do user
+    if(session == None):
+        Label(root, text="Sem sessão iniciada", font=("Arial", 9), justify="right", bg=background).grid(row=3, column=0, sticky=W)
+        Button(root,text="Iniciar Sessão",width=10,height=2, font=("Arial", 9, "bold"), background="red", command=lambda:login_page(root)).grid(column=0,row=5, sticky=W)
+    else:
+        Label(root, text=f"Bem-Vindo: {session.getFullName()}", font=("Arial", 9), justify="right", bg=background).grid(row=3, column=0, sticky=W)
+    #imagem teatro
+    #my_img = ImageTk.PhotoImage(Image.open("./data/espetaculos.jpg"))
+    #my_label = Label(root, image=my_img, height=250, width=350).grid(row=5, column=0)
+    #botao logout
+        Button(root,text="Espaço do Utilizador",width=10,height=2, font=("Arial", 9, "bold"), background="red", command=lambda:user_area(root,session)).grid(column=0,row=5, sticky=W)
+        Button(root,text="Log Out",width=10,height=2, font=("Arial", 9, "bold"), background="red", command=lambda:login_page(root)).grid(column=0,row=6, sticky=W)
+
+    root.mainloop()
 # Menu temporário para testar as funcionalidades ###########################################
 ############################################################################################
 ############################################################################################
@@ -248,4 +346,5 @@ def temp_menu():
 
 def main():
     controller.start()
-    login_page()
+    show_area()
+    #controller.save()
