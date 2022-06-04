@@ -111,7 +111,7 @@ def user_area(parent,session):
             pop.config(bg=background)
             pop_label1 = Label(pop, text=f"Nome do Espetáculo: {curr_show.getShowName()}", font=("Arial", 9), bg=background).grid(row=0, column=0, sticky=W)
             pop_label2 = Label(pop, text=f"Data do Espetáculo: {curr_show.getDate()}", font=("Arial", 9), bg=background).grid(row=1, column=0, sticky=W)
-            pop_label3 = Label(pop, text=f"Tipo de bilhete: {curr_show.getSeatType(curr_reserv.getSeatNumber())}", font=("Arial", 9), bg=background).grid(row=2, column=0, sticky=W)
+            pop_label3 = Label(pop, text=f"Tipo de bilhete: {curr_reserv.getSeatType()}", font=("Arial", 9), bg=background).grid(row=2, column=0, sticky=W)
             pop_label5 = Label(pop, text=f"Lugar: {curr_reserv.getSeatNumber()}", font=("Arial", 9), bg=background).grid(row=3, column=0, sticky=W)
             pop_label6 = Label(pop, text=f"Preço do Bilhete: {curr_reserv.getPrice()}", font=("Arial", 9), bg=background).grid(row=4, column=0, sticky=W)
             pop_label7 = Label(pop, text=" ", bg=background).grid(row=5, column=0)
