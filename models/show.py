@@ -1,6 +1,3 @@
-from tkinter.messagebox import RETRY
-
-
 class Show(object):
     def __init__(self, id : int, name : str, date : str, description : str, room : list) -> None:
         self.id = id
@@ -28,13 +25,31 @@ class Show(object):
     def getRoom(self):
         return self.room
 
-    def getSeatNumber(self,room_index : tuple):
-        pass
+    def getSeatIndex(self,seat_number) -> tuple:
+        first = seat_number[0]
+        second = int(seat_number[1:])
+        seat_letter = ["K","J","I","H","G","F","E","D","C","B","A"]
+        first_index = seat_letter.index(first)
+        second_index = second - 1
+        return (first_index,second_index)
+
+    def getSeatNumber(self, seat_index : tuple):
+        first = seat_index[0]
+        second = seat_index[1]
+        seat_letter = ["K","J","I","H","G","F","E","D","C","B","A"]
+        return seat_letter[first] + str(second+1)
+
+    def getSeatType(self,seat_number):
+        seat_index = self.getSeatIndex(seat_number)
+        if(self.room[seat_index[0]][seat_index[1]] == "N0" or self.room[seat_index[0]][seat_index[1]] == "N1"):
+            return "NORMAL"
+        elif(self.room[seat_index[0]][seat_index[1]] == "V0" or self.room[seat_index[0]][seat_index[1]] == "V1"):
+            return "VIP"
 
     def getSeatCount(self):
         counter = 0
         for seats_l in self.room:
             for seats_c in seats_l:
-                if(seats_c == "N1" or seats_c == "v1"):
+                if(seats_c == "N1" or seats_c == "V1"):
                     counter += 1
         return counter
