@@ -166,7 +166,7 @@ def show_area(parent=None,session=None):
         confirm_order_window.title(f"Lugar Reservado!")
         confirm_order_window.geometry("300x300")
         confirm_order_window.config(bg=background)
-        Label(confirm_order_window, text=f"Bilhete número {reservation_id} reservado!", font=("Arial", 12), bg=background).grid(row=0, column=0, sticky=W)
+        Label(confirm_order_window, text=f"Bilhete número #{reservation_id} reservado!", font=("Arial", 12), bg=background).grid(row=0, column=0, sticky=W)
         Button(confirm_order_window, text="OK!", command = lambda: user_area(root,session), bg="gray").grid(row=1, column=0)
 
     def order(seat_number,show): #Order Confirmation Window
