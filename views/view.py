@@ -1,10 +1,9 @@
 from operator import indexOf
 from tkinter import *
 from tkinter import messagebox
-from traceback import print_tb
 from PIL import ImageTk,Image
-import controllers.controller as controller
 import models.model as model
+import controllers.controller as controller
 
 background="#bbbbbb"
 
@@ -68,7 +67,7 @@ def register_page(parent):
     Button(root,text="Register",width=10,height=2,command=lambda:registrate_user(root,regist_email.get(),regist_name.get(),regist_password.get())).grid(column=0,row=5)
     Button(root,text="Login",width=10,height=2,command=lambda:login_page(root)).grid(column=1,row=5)
     root.mainloop()
-
+# USER AREA -----------------------------------------
 def user_area(parent,session):
     parent.destroy()
     root = Tk()
@@ -93,55 +92,49 @@ def user_area(parent,session):
         option_menu = OptionMenu(root, options, *SHOW)
     option_menu.grid(row=1,column=0,sticky=W)
 
-    #pop up da info dos bilhetes
-    def clicker():
+    #pop up da info dos bilhetes - window
+    def reservation_info():
         if(options.get() != "None"):
-            global pop
-            pop = Toplevel(root) # Criar uma página em cima da página atual
+            global info_window
+            info_window = Toplevel(root) # Criar uma página em cima da página atual
             reservation_id = options.get()[1:5]
             curr_reserv = None # Reservation Object
             curr_show = None #Show Object
             for reservations in controller.model.Reservation_List:
                 if(reservations.getID() == reservation_id):
-                    curr_reserv = reservations
+                    curr_reserv = reservations # get respective reservation object
             for shows in controller.model.Show_List:
                 if(shows.getID() == curr_reserv.getShowID()):
-                    curr_show = shows
-            pop.title(f"Informações - #{curr_reserv.getID()}")
-            pop.geometry("400x200")
-            pop.config(bg=background)
-            pop_label1 = Label(pop, text=f"Nome do Espetáculo: {curr_show.getShowName()}", font=("Arial", 9), bg=background).grid(row=0, column=0, sticky=W)
-            pop_label2 = Label(pop, text=f"Data do Espetáculo: {curr_show.getDate()}", font=("Arial", 9), bg=background).grid(row=1, column=0, sticky=W)
-            pop_label3 = Label(pop, text=f"Tipo de bilhete: {curr_reserv.getSeatType()}", font=("Arial", 9), bg=background).grid(row=2, column=0, sticky=W)
-            pop_label5 = Label(pop, text=f"Lugar: {curr_reserv.getSeatNumber()}", font=("Arial", 9), bg=background).grid(row=3, column=0, sticky=W)
-            pop_label6 = Label(pop, text=f"Preço do Bilhete: {curr_reserv.getPrice()}", font=("Arial", 9), bg=background).grid(row=4, column=0, sticky=W)
-            pop_label7 = Label(pop, text=" ", bg=background).grid(row=5, column=0)
-            cancel = Button(pop, text="Cancel", command = lambda: choice("cancel"), bg="gray")
-            cancel.grid(row=6, column=2)
+                    curr_show = shows #get respective show object
+            info_window.title(f"Informações - #{curr_reserv.getID()}")
+            info_window.geometry("400x200")
+            info_window.config(bg=background)
+            Label(info_window, text=f"Nome do Espetáculo: {curr_reserv.getShowName()}", font=("Arial", 9), bg=background).grid(row=0, column=0, sticky=W)
+            Label(info_window, text=f"Data do Espetáculo: {curr_show.getDate()}", font=("Arial", 9), bg=background).grid(row=1, column=0, sticky=W)
+            Label(info_window, text=f"Tipo de bilhete: {curr_reserv.getSeatType()}", font=("Arial", 9), bg=background).grid(row=2, column=0, sticky=W)
+            Label(info_window, text=f"Lugar: {curr_reserv.getSeatNumber()}", font=("Arial", 9), bg=background).grid(row=3, column=0, sticky=W)
+            Label(info_window, text=f"Preço do Bilhete: {curr_reserv.getPrice()}", font=("Arial", 9), bg=background).grid(row=4, column=0, sticky=W)
+            Label(info_window, text=" ", bg=background).grid(row=5, column=0)
+            Button(info_window, text="Cancel", command = lambda: choice("cancel"), bg="gray").grid(row=6, column=2)
 
+    #Opçoes na Window de info de bilhetes
     def choice(option):
-        pop.destroy()
         if option == "cancel":
-            pop.destroy()
-    #botao na area do user q mostra os bilhetes
-    #porque é que no command = dropdown?
-    #alterei o dropdown para clicker
-    Button(root, text="Ver Bilhete", command=clicker, width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=0, row=2)
-    
+            info_window.destroy()
+    #botao na area do user para redirecionar para a info window
+    Button(root, text="Ver Bilhete", command=reservation_info, width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=0, row=2)
+    #Informação do utilizador
     #nome do user
     Label(root, text=f"Bem-Vindo: {session.getFullName()}", font=("Arial", 9), justify="right", bg=background).grid(row=4, column=0, sticky=W)
     #imagem teatro
     #my_img = ImageTk.PhotoImage(Image.open("./data/espetaculos.jpg"))
     #my_label = Label(root, image=my_img, height=250, width=350).grid(row=5, column=0)
     #botao logout
-    Button(root,text="Log Out",width=10,height=2, font=("Arial", 9, "bold"), background="red", command=lambda:login_page(root)).grid(column=0,row=5, sticky=W)
-
+    Button(root,text="Encerrar Sessão",width=10,height=2, font=("Arial", 9, "bold"), background="red", command=lambda:show_area(root)).grid(column=0,row=5, sticky=W)
     #botao pagina principal
     Button(root, text="Ver Espetáculos", width=12, height=2, bg="#50616e", command=lambda:show_area(root,session)).grid(row=6, column=0,sticky=W)
-
     root.mainloop()
-
-
+# SHOW AREA -----------------
 def show_area(parent=None,session=None):
     if(parent is not None):
         parent.destroy()
@@ -153,12 +146,12 @@ def show_area(parent=None,session=None):
     #texto
     Label(root, text="Escolha o espetáculo que queira ver", font=("Verdana", 16), background="#7eb6de").grid(row=0, column=0, sticky=W)
     #dropdown 
-    #Get shows 
+    #Get all shows 
     SHOW = list()
     for shows in controller.model.Show_List:
         SHOW.append(f"#{shows.getID()} - {shows.getShowName()} [{shows.getDate()}]")
     options = StringVar(root)
-    if(len(SHOW) == 0): 
+    if(len(SHOW) == 0): #Caso não exista espetáculos
         options.set("None")
         option_menu = OptionMenu(root, options,"None")
     else: 
@@ -166,182 +159,85 @@ def show_area(parent=None,session=None):
         option_menu = OptionMenu(root, options, *SHOW)
     option_menu.grid(row=1,column=0,sticky=W)
 
-    def order(seat_number):
-        global pop_order
-        pop_order = Toplevel(pop)
-        pop_order.title(seat_number)
-        pop_order.geometry("300x300")
-        pop_order.config(bg=background)
-        cancel = Button(pop_order, text="Cancel", command = lambda: choice("cancel"), bg="gray")
-        cancel.grid(row=20, column=3)
+    def confirm_order(seat_number,show):
+        reservation_id = controller.order_ticket(session,show,seat_number)
+        global confirm_order_window
+        confirm_order_window = Toplevel(order_window)
+        confirm_order_window.title(f"Lugar Reservado!")
+        confirm_order_window.geometry("300x300")
+        confirm_order_window.config(bg=background)
+        Label(confirm_order_window, text=f"Bilhete número {reservation_id} reservado!", font=("Arial", 12), bg=background).grid(row=0, column=0, sticky=W)
+        Button(confirm_order_window, text="OK!", command = lambda: user_area(root,session), bg="gray").grid(row=1, column=0)
 
-    def show_room(show):
+    def order(seat_number,show): #Order Confirmation Window
+        global order_window
+        order_window = Toplevel(info_window)
+        order_window.title(f"Confirmar lugar {seat_number} - {show.getShowName()}")
+        order_window.geometry("500x300")
+        order_window.config(bg=background)
+        Label(order_window, text="Por Favor confirme a reserva deste bilhete:", font=("Arial", 12), bg=background).grid(row=0, column=0, sticky=W)
+        Label(order_window, text=f"Reserva para o espetáculo |{show.getShowName()}| em nome de {session.getFullName()}", font=("Arial", 9), bg=background).grid(row=1, column=0, sticky=W)
+        Label(order_window, text=f"Data do Espetáculo: {show.getDate()}", font=("Arial", 9), bg=background).grid(row=2, column=0, sticky=W)
+        Label(order_window, text=f"Lugar: {seat_number}", font=("Arial", 9), bg=background).grid(row=3, column=0, sticky=W)
+        Label(order_window, text=f"Tipo de Reserva: {show.getSeatType(seat_number)}", font=("Arial", 9), bg=background).grid(row=4, column=0, sticky=W)
+        Label(order_window, text=f"Preço: {show.getPriceFromSeat(seat_number)}€", font=("Arial", 9), bg=background).grid(row=5, column=0, sticky=W)
+        Label(order_window, text=" ", bg=background).grid(row=6, column=0)
+        Button(order_window, text="Reservar", command = lambda:confirm_order(seat_number,show), bg="gray").grid(row=20, column=1)
+        Button(order_window, text="Cancelar", command = order_window.destroy, bg="gray").grid(row=20, column=3)
+
+    def show_room(show): #Print the room in form of buttons
         room = show.getRoom()
         for l in range(len(room)):
             for c in range(len(room[l])):
                 seat_number = show.getSeatNumber((l,c))
                 if(room[l][c] == "N0"):
-                    Button(pop,text=" ",padx=16,pady=2,command=lambda seat_number=seat_number:order(seat_number)).grid(column=c+5,row=l+5)
+                    Button(info_window,text=" ",padx=16,pady=2,command=lambda seat_number=seat_number:order(seat_number,show)).grid(column=c+5,row=l+5)
                 elif(room[l][c] == "N1"):
-                    Button(pop,text=" ",bg='red',padx=16,pady=2,state=DISABLED).grid(column=c+5,row=l+5)
+                    Button(info_window,text=" ",bg='red',padx=16,pady=2,state=DISABLED).grid(column=c+5,row=l+5)
                 elif(room[l][c] == "V0"):
-                    Button(pop,text="VIP",padx=10,pady=2,command=lambda seat_number=seat_number:order(seat_number)).grid(column=c+5,row=l+5)
+                    Button(info_window,text="VIP",padx=10,pady=2,command=lambda seat_number=seat_number:order(seat_number,show)).grid(column=c+5,row=l+5)
                 elif(room[l][c] == "V1"):
-                    Button(pop,text="VIP",bg='red',padx=10,pady=2,state=DISABLED).grid(column=c+5,row=l+5)
+                    Button(info_window,text="VIP",bg='red',padx=10,pady=2,state=DISABLED).grid(column=c+5,row=l+5)
                 elif(room[l][c] == "NA"):
                     pass
 
-    #pop up da info dos bilhetes
-    def clicker():
+    #pop up da info de cada espetáculo - window
+    def show_info():
         if(options.get() != "None"):
-            global pop
-            pop = Toplevel(root) # Criar uma página em cima da página atual
+            global info_window
+            info_window = Toplevel(root) # Criar uma página em cima da página atual
             show_id = int(options.get()[1:(indexOf(options.get(),"-")-1)])
             curr_show = None #Show Object
             for shows in controller.model.Show_List:
                 if(shows.getID() == show_id):
-                    curr_show = shows
-            pop.title(f"Informação de Espetáculo - #{curr_show.getID()}")
-            pop.geometry("900x600")
-            pop.config(bg=background)
-            pop_label1 = Label(pop, text=f"Nome do Espetáculo: {curr_show.getShowName()}", font=("Arial", 9), bg=background).grid(row=0, column=0, sticky=W)
-            pop_label2 = Label(pop, text=f"Data do Espetáculo: {curr_show.getDate()}", font=("Arial", 9), bg=background).grid(row=1, column=0, sticky=W)
-            pop_label5 = Label(pop, text=f"Descrição: {curr_show.getDescription()}", font=("Arial", 9), bg=background).grid(row=2, column=0, sticky=W)
+                    curr_show = shows #Get respective show object
+            info_window.title(f"Informação do Espetáculo - #{curr_show.getID()}")
+            info_window.geometry("900x600")
+            info_window.config(bg=background)
+            Label(info_window, text=f"Nome do Espetáculo: {curr_show.getShowName()}", font=("Arial", 9), bg=background).grid(row=0, column=0, sticky=W)
+            Label(info_window, text=f"Data do Espetáculo: {curr_show.getDate()}", font=("Arial", 9), bg=background).grid(row=1, column=0, sticky=W)
+            Label(info_window, text=f"Descrição: {curr_show.getDescription()}", font=("Arial", 9), bg=background).grid(row=2, column=0, sticky=W)
+            Label(info_window, text=" ", bg=background).grid(row=3, column=0)
             if(session == None):
-                pop_label6 = Label(pop, text=f"Inicie sessão para reservar bilhetes", font=("Arial", 9), bg=background).grid(row=3, column=0, sticky=W)
+                Label(info_window, text=f"Inicie sessão para reservar bilhetes", font=("Arial", 9), bg=background).grid(row=4, column=0, sticky=W)
             else:
                 show_room(curr_show)
-            cancel = Button(pop, text="Cancel", command = lambda: choice("cancel"), bg="gray")
-            cancel.grid(row=20, column=3)
+            Button(info_window, text="Cancel", command = lambda: choice("cancel"), bg="gray").grid(row=20, column=3)
     
     def choice(option):
-        pop.destroy()
         if option == "cancel":
-            pop.destroy()
-    #botao na area do user q mostra os bilhetes
-    #porque é que no command = dropdown?
-    #alterei o dropdown para clicker
-    Button(root, text="Ver Espetáculo", command=clicker, width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=0, row=2)
-    
+            info_window.destroy()
+    #Botão para redirecionar 
+    Button(root, text="Ver Espetáculo", command=show_info, width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=0, row=2)
     #nome do user
     if(session == None):
         Label(root, text="Sem sessão iniciada", font=("Arial", 9), justify="right", bg=background).grid(row=3, column=0, sticky=W)
         Button(root,text="Iniciar Sessão",width=10,height=2, font=("Arial", 9, "bold"), background="red", command=lambda:login_page(root)).grid(column=0,row=5, sticky=W)
     else:
         Label(root, text=f"Bem-Vindo: {session.getFullName()}", font=("Arial", 9), justify="right", bg=background).grid(row=3, column=0, sticky=W)
-    #imagem teatro
-    #my_img = ImageTk.PhotoImage(Image.open("./data/espetaculos.jpg"))
-    #my_label = Label(root, image=my_img, height=250, width=350).grid(row=5, column=0)
-    #botao logout
         Button(root,text="Espaço do Utilizador",width=10,height=2, font=("Arial", 9, "bold"), background="red", command=lambda:user_area(root,session)).grid(column=0,row=5, sticky=W)
-        Button(root,text="Log Out",width=10,height=2, font=("Arial", 9, "bold"), background="red", command=lambda:login_page(root)).grid(column=0,row=6, sticky=W)
-
+        Button(root,text="Encerrar Sessão",width=10,height=2, font=("Arial", 9, "bold"), background="red", command=lambda:show_area(root)).grid(column=0,row=6, sticky=W)
     root.mainloop()
-# Menu temporário para testar as funcionalidades ###########################################
-############################################################################################
-############################################################################################
-############################################################################################
-def temp_main_menu():
-    print("Indique uma opção\n")
-    print("\t1) Registar Utilizador\n")
-    print("\t2) Entrar como Utilizador Existente\n")
-    print("\t3) Ver Espetáculos\n")
-    print("\t4) Sair\n") 
-    return int(input("Opção: "))
-
-def temp_login():
-    print("Iniciar Sessão\n")
-    email = input("\tEmail: ")
-    password = input("\tPassword: ")
-    return controller.authenticate_user(email,password)
-
-def temp_register():
-    print("Registar Sessão\n")
-    nome = input("\tNome Completo: ")
-    email = input("\tEmail: ")
-    password = input("\tPassword: ")
-    return controller.registrate_user(nome,email,password)
-
-def temp_user_area(user):
-    print(f"Bem-vindo {user.getFullName()} à area de utilizador\n")
-    print("As suas reservas:\n")
-    #Ver todas as reservas com o ID deste utilizador
-    for reservations in controller.model.Reservation_List:
-        if(user.getID() == reservations.getUserID()):
-            print(f"\t Reserva número {reservations.getID()}\n")
-    return int(input("Escreva 1 para encerrar sessão OU 2 para ver espetáculos: "))
-
-def temp_show(user):
-    if(user == None): print("Sem sessão iniciada\n")
-    else: print(f"Bem-vindo aos espetaculos {user.getFullName()}\n")
-    for shows in controller.model.Show_List:
-        print(f"Espetáculo {shows.getID()} - {shows.getShowName()}\n")
-        print(f"\tData do espetáculo: {shows.getDate()}\n")
-        if(shows.getCapacity()): print("\tEste espetáculo tem a lotação máxima\n")
-        else: print(f"\tEste espetáculo tem {(shows.getSeatCount()/142) * 100}% da lotação máxima\n") # 142 é o espaço total de cada sala
-        print(f"\tDescrição: {shows.getDescription()}\n")
-        print(f"\tSala:")
-        temp_show_room(shows.getRoom())
-        print("\n")
-    return int(input("Escreva 1 para voltar ao menu principal: "))
-
-def temp_show_room(room):
-    for l in room:
-        for c in l:
-            if(c == "N0"):
-                print("[ ]",end="") 
-            elif(c == "N1"):
-                print("[ x ]",end="") 
-            elif(c == "V0"):
-                print("[VIP]",end="")
-            elif(c == "V1"):
-                print("[ x ]",end="") 
-            elif(c == "NA"):
-                print(" ",end="")
-        print("\n")
-
-
-def temp_menu():
-    controller.start()
-    session = None
-    menu = 0 
-    while(1):
-        if(menu == 0): 
-            menu = temp_main_menu()
-        elif(menu == 1): 
-            register = temp_register()
-            if(register == 0):
-                print("O email já existe!")
-                menu = 0
-            elif(register == 1):
-                print("Registo feito com sucesso! Por favor inicie sessão com o seu email e password")
-                menu = 0
-        elif(menu == 2):
-            login = temp_login()
-            if(login == 0):
-                print("O utilizador não existe")
-                menu = 0
-            elif(login == -1):
-                print("Password errada")
-                menu = 0
-            else:
-                print(f"Bem-vindo {login.getFullName()}")
-                session = login
-                menu = 5
-        elif(menu == 3):
-            if(temp_show(session) == 1):
-                menu = 0
-        elif(menu == 4):
-            #controller.save()
-            break
-        elif(menu == 5):
-            option = temp_user_area(session)
-            if(option == 1): 
-                session = None
-                menu = 0
-            elif(option == 2):
-                menu = 3 
-            
 
 def main():
     controller.start()

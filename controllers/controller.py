@@ -3,6 +3,7 @@ import models.show as show
 import models.user as user
 import models.model as model
 import json
+from random import randint
 #Função utilizada quando se dá o início do programa
 #Esta função vai carrregar todos os dados dos JSON nas variáveis globais do tipo lista (ver no models/model)
 def start():
@@ -128,20 +129,26 @@ def create_user_id():
         return id_verify
 
 # Esta função vai retornar ids que não existam registados para novos registos da reserva feita pelo utilizador
-def create_reservation_id():
+# ID de 4 dígitos hexadecimal
+def generateHexadecimal():
+    final = ""
+    for _ in range(4):
+        rand_hex = hex(randint(0,15))[2:]
+        final += rand_hex
+    return final
+
+def create_reservation_id(): 
     tmp_verify = []
-    id_verify = 100
-    #adicionei os ids existentes a uma lista temporaria
-    for x in range(len(model.Reservation_List)):
-        tmp_verify.append(model.Reservation_List[x].getID())
-    #aqui verifiquei se os ids existiam ou não na lista temporária criada
-    if id_verify not in tmp_verify:
-        return id_verify
+    final_rand_string = generateHexadecimal()
+    for reservation in model.Reservation_List:
+        tmp_verify.append(reservation.getID())
+    if(len(tmp_verify) == 0):
+        return final_rand_string
     else:
-        for i in range(len(tmp_verify)):
-            if id_verify == tmp_verify[i]:
-                id_verify += 1
-        return id_verify 
+        while(final_rand_string in tmp_verify):
+            final_rand_string = generateHexadecimal()
+        return final_rand_string
+
 #Registar novo utilizador
 def registrate_user(name, email, password):
     user_id = create_user_id()
@@ -164,21 +171,16 @@ def authenticate_user(email,password):
 #Ver se é preciso passar estes parâmetros na função order_tickets
 # A partir do user id e show id temos acesso ao resto, não é preciso ter mais parâmetros
 # VER ONDE CRÍAMOS O CONTROLO PARA VER SE O SEAT ESTÁ OCUPADO OU NÃO:
-def order_tickets(user_id, show_id, show_type, price, seat_number):
-    curr_user = None
-    curr_show = None
-    for users in model.User_List:
-        if(users.getID() == user_id):
-            curr_user = users
-    for shows in model.Show_List:
-        if(shows.getID() == show_id):
-            curr_show = shows
+def order_ticket(user,show,seat_number):
+    #Mudar Estado do Lugar na matriz
+    show.setSeatOccupancy(seat_number,True) #True to set the seat taken
     #criei um id para a reserva
     reservation_id = create_reservation_id()
     #Criar objecto
-    temp_reservation_obj = reservation.Reservation(reservation_id,user_id,curr_user.getName(),show_id,curr_show.getName(),price,seat_number,show_type)
+    temp_reservation_obj = reservation.Reservation(reservation_id,user.getID(),user.getFullName(),show.getID(),show.getShowName(),show.getPriceFromSeat(seat_number),seat_number,show.getSeatType(seat_number))
     # aqui vamos adicionar as características da reserva para o json das reservas.
     model.Reservation_List.append(temp_reservation_obj)
+    return reservation_id
 
 # O clear order vai apagar a reservation com o id respectivo e vai libertar um espaço na matriz no seat number respectivo do show respectivo
 def clear_order(show_id, seat_number):

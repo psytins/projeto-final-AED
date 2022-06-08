@@ -46,6 +46,12 @@ class Show(object):
         elif(self.room[seat_index[0]][seat_index[1]] == "V0" or self.room[seat_index[0]][seat_index[1]] == "V1"):
             return "VIP"
 
+    def getPriceFromSeat(self,seat_number): #Preços estipulados para cada espetáculo
+        if(self.getSeatType(seat_number) == "NORMAL"):
+            return 4.00
+        elif(self.getSeatType(seat_number) == "VIP"):
+            return 12.00
+
     def getSeatCount(self):
         counter = 0
         for seats_l in self.room:
@@ -53,3 +59,12 @@ class Show(object):
                 if(seats_c == "N1" or seats_c == "V1"):
                     counter += 1
         return counter
+    
+    def setSeatOccupancy(self,seat_number,taken : bool):
+        seat_index = self.getSeatIndex(seat_number) #tuple
+        if(taken):
+            if(self.getSeatType(seat_number) == "NORMAL"): self.room[seat_index[0]][seat_index[1]] = "N1"
+            elif(self.getSeatType(seat_number) == "VIP"): self.room[seat_index[0]][seat_index[1]] = "V1"
+        else:
+            if(self.getSeatType(seat_number) == "NORMAL"): self.room[seat_index[0]][seat_index[1]] = "N0"
+            elif(self.getSeatType(seat_number) == "VIP"): self.room[seat_index[0]][seat_index[1]] = "V0"
