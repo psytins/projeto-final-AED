@@ -94,7 +94,7 @@ def user_area(parent,session):
         option_menu = OptionMenu(root, options, *SHOW)
     option_menu.grid(row=1,column=0,sticky=W)
     #botao na area do user para redirecionar para a info window
-    Button(root, text="Ver Bilhete", command=lambda:reservation_info(root,options), width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=0, row=2)
+    Button(root, text="Ver Bilhete", command=lambda:reservation_info(root,session,options), width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=0, row=2)
     #Informação do utilizador
     #nome do user
     Label(root, text=f"Bem-Vindo: {session.getFullName()}", font=("Arial", 9), justify="right", bg=background).grid(row=4, column=0, sticky=W)
@@ -105,7 +105,7 @@ def user_area(parent,session):
     root.mainloop()
 
 #pop up da info dos bilhetes - window
-def reservation_info(parent,reservation):
+def reservation_info(parent,session,reservation):
     if(reservation.get() != "None"):
         info_window = Toplevel(parent) # Criar uma página em cima da página atual
         reservation_id = reservation.get()[1:5]
@@ -126,7 +126,18 @@ def reservation_info(parent,reservation):
         Label(info_window, text=f"Lugar: {curr_reserv.getSeatNumber()}", font=("Arial", 9), bg=background).grid(row=3, column=0, sticky=W)
         Label(info_window, text=f"Preço do Bilhete: {curr_reserv.getPrice()}€", font=("Arial", 9), bg=background).grid(row=4, column=0, sticky=W)
         Label(info_window, text=" ", bg=background).grid(row=5, column=0)
-        Button(info_window, text="Cancel", command = lambda: choice(info_window,"cancel"), bg="gray").grid(row=6, column=2)
+        Button(info_window, text="Reembolsar", command = lambda: confirm_refund(parent,session,info_window,curr_reserv,curr_show,curr_reserv.getSeatNumber()), bg="gray").grid(row=6, column=3)
+        Button(info_window, text="Cancel", command = lambda: choice(info_window,"cancel"), bg="gray").grid(row=6, column=4)
+
+def confirm_refund(parent,session,info_window,reservation,show,seat_number):
+    reservation_id = controller.clear_order(reservation,show,seat_number)
+    confirm_refund_window = Toplevel(info_window)
+    confirm_refund_window.title(f"Lugar Reembolsado - Este lugar já não lhe pertence!")
+    confirm_refund_window.geometry("300x300")
+    confirm_refund_window.config(bg=background)
+    Label(confirm_refund_window, text=f"Bilhete número #{reservation_id} reembolsado!", font=("Arial", 12), bg=background).grid(row=0, column=0, sticky=W)
+    Button(confirm_refund_window, text="OK!", command = lambda: user_area(parent,session), bg="gray").grid(row=1, column=0)
+
 
 #Opçoes na Window de info de bilhetes
 def choice(parent,option):

@@ -182,11 +182,11 @@ def order_ticket(user,show,seat_number):
     model.Reservation_List.append(temp_reservation_obj)
     return reservation_id
 
-
 #Função para eliminar a reserva de bilhetes
-def clear_order(reservation_id, show, seat_number):
-    for reservation in model.Reservation_List:
-        if reservation_id == reservation.getID():
-            model.Reservation_List.pop(reservation)
+def clear_order(reservation, show, seat_number):
+    for i in range(len(model.Reservation_List)):
+        if(reservation.getID() == model.Reservation_List[i].getID()):
+            model.Reservation_List.pop(i)
             show.setSeatOccupancy(seat_number, False)
             break
+    return reservation.getID()
