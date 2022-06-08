@@ -182,16 +182,11 @@ def order_ticket(user,show,seat_number):
     model.Reservation_List.append(temp_reservation_obj)
     return reservation_id
 
-# O clear order vai apagar a reservation com o id respectivo e vai libertar um espaço na matriz no seat number respectivo do show respectivo
-def clear_order(show_id, seat_number):
-    # Penso que não precisamos do user_id como parâmetro pois temos a função login implementada
-    for i in range(len(model.Show_List)):
-        if show_id == model.Show_List[i].getID():
-            for x in range(len(model.Reservation_List)):
-                if seat_number == model.Reservation_List[x].getSeatNumber():
-                    model.Reservation_List.pop(x)
-                    print(model.Reservation_List)
-                    return 1
-                else:
-                    #mudar o return para um erro de não existir o show pedido
-                    return -1
+
+#Função para eliminar a reserva de bilhetes
+def clear_order(reservation_id, show, seat_number):
+    for reservation in model.Reservation_List:
+        if reservation_id == reservation.getID():
+            model.Reservation_List.pop(reservation)
+            show.setSeatOccupancy(seat_number, False)
+            break
