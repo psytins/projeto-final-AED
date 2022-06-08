@@ -124,7 +124,7 @@ def reservation_info(parent,reservation):
         Label(info_window, text=f"Data do Espetáculo: {curr_show.getDate()}", font=("Arial", 9), bg=background).grid(row=1, column=0, sticky=W)
         Label(info_window, text=f"Tipo de bilhete: {curr_reserv.getSeatType()}", font=("Arial", 9), bg=background).grid(row=2, column=0, sticky=W)
         Label(info_window, text=f"Lugar: {curr_reserv.getSeatNumber()}", font=("Arial", 9), bg=background).grid(row=3, column=0, sticky=W)
-        Label(info_window, text=f"Preço do Bilhete: {curr_reserv.getPrice()}", font=("Arial", 9), bg=background).grid(row=4, column=0, sticky=W)
+        Label(info_window, text=f"Preço do Bilhete: {curr_reserv.getPrice()}€", font=("Arial", 9), bg=background).grid(row=4, column=0, sticky=W)
         Label(info_window, text=" ", bg=background).grid(row=5, column=0)
         Button(info_window, text="Cancel", command = lambda: choice(info_window,"cancel"), bg="gray").grid(row=6, column=2)
 
@@ -184,9 +184,16 @@ def show_info(parent,session,show):
         Label(info_window, text=f"Nome do Espetáculo: {curr_show.getShowName()}", font=("Arial", 9), bg=background).grid(row=0, column=0, sticky=W)
         Label(info_window, text=f"Data do Espetáculo: {curr_show.getDate()}", font=("Arial", 9), bg=background).grid(row=1, column=0, sticky=W)
         Label(info_window, text=f"Descrição: {curr_show.getDescription()}", font=("Arial", 9), bg=background).grid(row=2, column=0, sticky=W)
-        Label(info_window, text=" ", bg=background).grid(row=3, column=0)
+        # Tabela de Preços ---
+        Label(info_window, text=f"----------------------------------------------", font=("Arial", 9), bg=background).grid(row=3, column=0, sticky=W)
+        Label(info_window, text=f"Tabela de Preços", font=("Arial", 9), bg=background).grid(row=4, column=0, sticky=W)
+        Label(info_window, text=f"Preço NORMAL - 4,00€", font=("Arial", 9), bg=background).grid(row=5, column=0, sticky=W)
+        Label(info_window, text=f"Preço VIP - 12,00€", font=("Arial", 9), bg=background).grid(row=6, column=0, sticky=W)
+        Label(info_window, text=f"----------------------------------------------", font=("Arial", 9), bg=background).grid(row=7, column=0, sticky=W)
+        # -------
+        Label(info_window, text=" ", bg=background).grid(row=8, column=0)
         if(session == None):
-            Label(info_window, text="Inicie sessão para reservar bilhetes", font=("Arial", 9), bg=background).grid(row=4, column=0, sticky=W)
+            Label(info_window, text="Inicie sessão para reservar bilhetes", font=("Arial", 9), bg=background).grid(row=9, column=0, sticky=W)
         else:
             show_room(parent,session,info_window,curr_show)
         Button(info_window, text="Cancel", command = lambda: choice(info_window,"cancel"), bg="gray").grid(row=20, column=3)

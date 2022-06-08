@@ -25,7 +25,7 @@ class Reservation(object):
         return self.show_name
 
     def getPrice(self):
-        return self.price
+        return format(self.price, '.2f')
 
     def getSeatNumber(self):
         return self.seat_number

@@ -177,7 +177,7 @@ def order_ticket(user,show,seat_number):
     #criei um id para a reserva
     reservation_id = create_reservation_id()
     #Criar objecto
-    temp_reservation_obj = reservation.Reservation(reservation_id,user.getID(),user.getFullName(),show.getID(),show.getShowName(),show.getPriceFromSeat(seat_number),seat_number,show.getSeatType(seat_number))
+    temp_reservation_obj = reservation.Reservation(reservation_id,user.getID(),user.getFullName(),show.getID(),show.getShowName(),float(show.getPriceFromSeat(seat_number)),seat_number,show.getSeatType(seat_number))
     # aqui vamos adicionar as características da reserva para o json das reservas.
     model.Reservation_List.append(temp_reservation_obj)
     return reservation_id

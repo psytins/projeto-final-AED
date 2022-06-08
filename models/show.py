@@ -48,9 +48,9 @@ class Show(object):
 
     def getPriceFromSeat(self,seat_number): #Preços estipulados para cada espetáculo
         if(self.getSeatType(seat_number) == "NORMAL"):
-            return 4.00
+            return format(4.00, '.2f')
         elif(self.getSeatType(seat_number) == "VIP"):
-            return 12.00
+            return format(12.00, '.2f')
 
     def getSeatCount(self):
         counter = 0
