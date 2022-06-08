@@ -178,15 +178,14 @@ def show_area(parent=None,session=None):
     def show_room(show):
         room = show.getRoom()
         for l in range(len(room)):
-            for c in range(len(room[l])): ## Tá bugado
+            for c in range(len(room[l])):
+                seat_number = show.getSeatNumber((l,c))
                 if(room[l][c] == "N0"):
-                    seat_number = show.getSeatNumber((l,c))
-                    Button(pop,text=" ",padx=16,pady=2,command=lambda:order(seat_number)).grid(column=c+5,row=l+5)
+                    Button(pop,text=" ",padx=16,pady=2,command=lambda seat_number=seat_number:order(seat_number)).grid(column=c+5,row=l+5)
                 elif(room[l][c] == "N1"):
                     Button(pop,text=" ",bg='red',padx=16,pady=2,state=DISABLED).grid(column=c+5,row=l+5)
                 elif(room[l][c] == "V0"):
-                    seat_number = show.getSeatNumber((l,c))
-                    Button(pop,text="VIP",padx=10,pady=2,command=lambda:order(seat_number)).grid(column=c+5,row=l+5)
+                    Button(pop,text="VIP",padx=10,pady=2,command=lambda seat_number=seat_number:order(seat_number)).grid(column=c+5,row=l+5)
                 elif(room[l][c] == "V1"):
                     Button(pop,text="VIP",bg='red',padx=10,pady=2,state=DISABLED).grid(column=c+5,row=l+5)
                 elif(room[l][c] == "NA"):
