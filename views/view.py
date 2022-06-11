@@ -32,8 +32,8 @@ def login_page(parent):
     Label(root, text="Password", padx=10,pady=10).grid(column=0,row=2, sticky=W)
     Entry(root,width=30,borderwidth=2, textvariable=user_password, show="*").grid(column=1,row=2)
     #Button
-    Button(root,text="Login",width=10,height=2,command=lambda:autenticate_user(root,user_email.get(),user_password.get())).grid(column=0,row=3)
-    Button(root,text="Register",width=10,height=2,command=lambda:register_page(root)).grid(column=1,row=3)
+    Button(root,text="Login",bg="#b2cadb",width=10,height=2,command=lambda:autenticate_user(root,user_email.get(),user_password.get())).grid(column=0,row=3)
+    Button(root,text="Register",bg="#b2cadb",width=10,height=2,command=lambda:register_page(root)).grid(column=1,row=3)
     root.mainloop()
 #------------------------------------------------------------------------------------------------------------------------
 # REGISTER WINDOW ------------------------------------------------------------
@@ -47,26 +47,26 @@ def registrate_user(parent,email,name,password):
 def register_page(parent): 
     parent.destroy()
     root = Tk()
-    root.title("Show Time! - Register")
+    root.title("Show Time! - Registo")
     root.geometry("350x500")
     root.resizable(False,False)
-    Label(root, text="Welcome to Show Time!", padx=10,pady=10).grid(column=0,row=0, sticky=W)
-    Label(root, text="Please register", padx=5,pady=6).grid(column=0,row=1, sticky=W)
+    Label(root, text="Bem-vindo/a ao Show Time!", padx=10,pady=10).grid(column=0,row=0, sticky=W)
+    Label(root, text="Crie a sua conta!", padx=5,pady=6).grid(column=0,row=1, sticky=W)
     #Full Name
     regist_name = StringVar()
     Label(root, text="Full Name", padx=10,pady=10).grid(column=0,row=2, sticky=W)
     Entry(root,width=30,borderwidth=2,textvariable=regist_name).grid(column=1,row=2)
     #Email
     regist_email = StringVar()
-    Label(root, text="Email", padx=10,pady=10).grid(column=0,row=3, sticky=W)
+    Label(root, text="E-mail", padx=10,pady=10).grid(column=0,row=3, sticky=W)
     Entry(root,width=30,borderwidth=2,textvariable=regist_email).grid(column=1,row=3)
     #Password
     regist_password = StringVar()
     Label(root, text="Password", padx=10,pady=10).grid(column=0,row=4, sticky=W)
     Entry(root,width=30,borderwidth=2,textvariable=regist_password,show="*").grid(column=1,row=4)
     #Button
-    Button(root,text="Register",width=10,height=2,command=lambda:registrate_user(root,regist_email.get(),regist_name.get(),regist_password.get())).grid(column=0,row=5)
-    Button(root,text="Login",width=10,height=2,command=lambda:login_page(root)).grid(column=1,row=5)
+    Button(root,text="Registo",bg="#b2cadb",width=10,height=2,command=lambda:registrate_user(root,regist_email.get(),regist_name.get(),regist_password.get())).grid(column=0,row=5)
+    Button(root,text="Login",bg="#b2cadb",width=10,height=2,command=lambda:login_page(root)).grid(column=1,row=5)
     root.mainloop()
 #------------------------------------------------------------------------------------------------------------------------
 # USER AREA -----------------------------------------
@@ -95,13 +95,16 @@ def user_area(parent,session):
     option_menu.grid(row=1,column=0,sticky=W)
     #botao na area do user para redirecionar para a info window
     Button(root, text="Ver Bilhete", command=lambda:reservation_info(root,session,options), width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=0, row=2)
+    #Separação
+    Label(root, text=" ", bg="#bbbbbb").grid(row=4, column=0)
+    Label(root, text=" ", bg="#bbbbbb").grid(row=5, column=0)
     #Informação do utilizador
     #nome do user
-    Label(root, text=f"Bem-Vindo: {session.getFullName()}", font=("Arial", 9), justify="right", bg=background).grid(row=4, column=0, sticky=W)
+    Label(root, text=f"Bem-Vindo: {session.getFullName()}", font=("Arial", 9), justify="right", bg=background).place(x=510,y=10)
     #botao logout
-    Button(root,text="Encerrar Sessão",width=10,height=2, font=("Arial", 9, "bold"), background="red", command=lambda:show_area(root)).grid(column=0,row=5, sticky=W)
+    Button(root,text="Encerrar Sessão",width=15,height=2, font=("Arial", 9, "bold"), background="red", command=lambda:show_area(root)).place(x=570,y=30)
     #botao pagina principal
-    Button(root, text="Ver Espetáculos", width=12, height=2, bg="#50616e", command=lambda:show_area(root,session)).grid(row=6, column=0,sticky=W)
+    Button(root, text="Ver Espetáculos", font=("Arial", 9, "bold"), width=15, height=2, bg="#3f6f91", command=lambda:show_area(root,session)).place(x=560,y=450)
     root.mainloop()
 
 #pop up da info dos bilhetes - window
@@ -179,14 +182,19 @@ def show_area(parent=None,session=None):
     option_menu.grid(row=1,column=0,sticky=W)
     #Botão para redirecionar 
     Button(root, text="Ver Espetáculo", command= lambda:show_info(root,session,options),width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=0, row=2)
+    #Separação
+    Label(root, text=" ", bg="#bbbbbb").grid(row=3, column=0)
+    Label(root, text=" ", bg="#bbbbbb").grid(row=4, column=0)
     #Info do user
     if(session == None):
-        Label(root,text="Sem sessão iniciada", font=("Arial", 9), justify="right", bg=background).grid(row=3, column=0, sticky=W)
-        Button(root,text="Iniciar Sessão",width=10,height=2, font=("Arial", 9, "bold"), background="red", command=lambda:login_page(root)).grid(column=0,row=5, sticky=W)
+        Label(root,text="Sem sessão iniciada", font=("Arial", 9), justify="right", bg=background).place(x=570,y=430)
+        Button(root,text="Iniciar Sessão",width=15,height=2, font=("Arial", 9, "bold"), background="#b2cadb", command=lambda:login_page(root)).place(x=580,y=453)
     else:
-        Label(root, text=f"Bem-Vindo: {session.getFullName()}", font=("Arial", 9), justify="right", bg=background).grid(row=3, column=0, sticky=W)
-        Button(root,text="Espaço do Utilizador",width=10,height=2, font=("Arial", 9, "bold"), background="red", command=lambda:user_area(root,session)).grid(column=0,row=5, sticky=W)
-        Button(root,text="Encerrar Sessão",width=10,height=2, font=("Arial", 9, "bold"), background="red", command=lambda:show_area(root)).grid(column=0,row=6, sticky=W)
+        Label(root, text=f"Bem-Vindo: {session.getFullName()}", font=("Arial", 9), justify="right", bg=background).place(x=510,y=10)
+        #botao espaço uutilizador
+        Button(root,text="Espaço do Utilizador",width=16,height=2, font=("Arial", 9, "bold"), background="#3f6f91", command=lambda:user_area(root,session)).place(x=560,y=450)
+        #encerrar sessao
+        Button(root,text="Encerrar Sessão",width=15,height=2, font=("Arial", 9, "bold"), background="red", command=lambda:show_area(root)).place(x=570,y=30)
     root.mainloop()
 
 #pop up da info de cada espetáculo - window
