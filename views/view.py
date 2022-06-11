@@ -1,6 +1,7 @@
 from operator import indexOf
 from tkinter import *
 from tkinter import messagebox
+from tkinter.tix import Tree
 from PIL import ImageTk,Image
 import models.model as model
 import controllers.controller as controller
@@ -142,13 +143,14 @@ def confirm_refund(parent,session,info_window,reservation,show,seat_number):
     Label(confirm_refund_window, text=f"Bilhete número #{reservation_id} reembolsado!", font=("Arial", 12), bg=background).grid(row=0, column=0, sticky=W)
     Button(confirm_refund_window, text="OK!", command = lambda: user_area(parent,session), bg="gray").grid(row=1, column=0)
 
-def confirm_seat_change(parent,session,info_window,reservation,show,seat_number):
+def confirm_seat_change(parent,session,info_window,reservation,show,seat_number): # Bug aqui -> Quando clicamos alterar reserva, e se cancelarmos, ele elimina o lugar. 
     confirm_refund_window = Toplevel(info_window)
     confirm_refund_window.title(f"Alterar Reserva")
-    confirm_refund_window.geometry("700x500")
+    confirm_refund_window.geometry("900x600")
     confirm_refund_window.config(bg=background)
-    Label(confirm_refund_window, text=f"{session.getFullName()} Selecione um novo lugar:", font=("Arial", 12), bg=background).grid(row=0, column=0, sticky=W)
-    show_room(parent,session,confirm_refund_window,show)
+    Label(confirm_refund_window, text=f"{session.getFullName()}, selecione um novo lugar:", font=("Arial", 12), bg=background).grid(row=0, column=0, sticky=W)
+    Label(confirm_refund_window, text=f"O seu lugar: {seat_number}", font=("Arial", 12), bg=background).grid(row=1, column=0, sticky=W)
+    show_room(parent,session,confirm_refund_window,show,seat_number)
     controller.clear_order(reservation,show,seat_number)
 
 #Opçoes na Window de info de bilhetes
@@ -226,19 +228,28 @@ def show_info(parent,session,show):
             show_room(parent,session,info_window,curr_show)
         Button(info_window, text="Cancel", command = lambda: choice(info_window,"cancel"), bg="gray").grid(row=20, column=3)
 
-def show_room(parent,session,info_window,show): #Print the room in form of buttons
+def show_room(parent,session,info_window,show,seat_change=None): #Print the room in form of buttons
     room = show.getRoom()
     for l in range(len(room)):
+        Label(info_window, text=show.getSeatNumber((l,0))[0], font=("Arial", 9), bg=background).grid(row=l+5, column=4)
         for c in range(len(room[l])):
+            if(l == 0): # Print seat numbers
+                Label(info_window, text=show.getSeatNumber((l,c))[1:], font=("Arial", 9), bg=background).grid(row=l+4, column=c+5)
             seat_number = show.getSeatNumber((l,c))
             if(room[l][c] == "N0"):
                 Button(info_window,text=" ",padx=16,pady=2,command=lambda seat_number=seat_number:order(parent,session,info_window,seat_number,show)).grid(column=c+5,row=l+5)
             elif(room[l][c] == "N1"):
-                Button(info_window,text=" ",bg='red',padx=16,pady=2,state=DISABLED).grid(column=c+5,row=l+5)
+                if(seat_change is not None and show.getSeatNumber((l,c)) == seat_change): 
+                    Button(info_window,text=" ",bg='green',padx=16,pady=2,state=DISABLED).grid(column=c+5,row=l+5)
+                else:
+                    Button(info_window,text=" ",bg='red',padx=16,pady=2,state=DISABLED).grid(column=c+5,row=l+5)                
             elif(room[l][c] == "V0"):
                 Button(info_window,text="VIP",padx=10,pady=2,command=lambda seat_number=seat_number:order(parent,session,info_window,seat_number,show)).grid(column=c+5,row=l+5)
             elif(room[l][c] == "V1"):
-                Button(info_window,text="VIP",bg='red',padx=10,pady=2,state=DISABLED).grid(column=c+5,row=l+5)
+                if(seat_change is not None and show.getSeatNumber((l,c)) == seat_change): 
+                    Button(info_window,text="VIP",bg='green',padx=16,pady=2,state=DISABLED).grid(column=c+5,row=l+5)
+                else:
+                    Button(info_window,text="VIP",bg='red',padx=16,pady=2,state=DISABLED).grid(column=c+5,row=l+5)  
             elif(room[l][c] == "NA"):
                 pass
 
