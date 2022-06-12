@@ -151,6 +151,8 @@ def create_reservation_id():
 
 #Registar novo utilizador
 def registrate_user(name, email, password):
+    if(email == "" or name == "" or password == ""):
+        return -1 # Tem que preencher os espaços
     user_id = create_user_id()
     for u in model.User_List:
         if(email == u.getEmail()):
@@ -160,6 +162,8 @@ def registrate_user(name, email, password):
     return temp_user_obj
 
 def authenticate_user(email,password):
+    if(email == "" or password == ""):
+        return -2 # Tem que preencher os espaços
     curr_user = None
     for users in model.User_List:
         if(users.getEmail() == email):
