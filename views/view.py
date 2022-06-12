@@ -164,7 +164,7 @@ def confirm_refund(parent,session,info_window,reservation,show,seat_number):
     Label(confirm_refund_window, text=f"Bilhete número #{reservation_id} reembolsado!", font=("Arial", 12), bg=BG1).grid(row=0, column=0, sticky=W)
     Button(confirm_refund_window, text="OK!", command = lambda: user_area(parent,session), bg="gray").grid(row=1, column=0)
 
-def confirm_seat_change(parent,session,info_window,reservation,show,seat_number): # Bug aqui -> Quando clicamos alterar reserva, e se cancelarmos, ele elimina o lugar. 
+def confirm_seat_change(parent,session,info_window,reservation,show,seat_number): 
     confirm_refund_window = Toplevel(info_window)
     confirm_refund_window.title(f"Alterar Reserva")
     confirm_refund_window.geometry(CONFIRM_CHANGE_SIZE)
