@@ -30,37 +30,27 @@ def autenticate_user(parent,email,password):
     else:
         user_area(parent,auth)
 
-#Calculate where the window should appear (Always open in the middle)(can be tweak to be able to open where we want)
-def calculate_geometry(root,size:tuple):
-    curr_w = size[0]
-    curr_h = size[1]
-    #screen_w = root.winfo_screenwidth()
-    #screen_h = root.winfo_screenheight()
-    #x = int((screen_w/2) - (curr_w/2))
-    #y = int((screen_h/2) - (curr_h/2))
-    x = root.winfo_x()
-    y = root.winfo_y()
-    return str(curr_w)+"x"+str(curr_h)+"+"+str(x)+"+"+str(y) #string for Tk().geometry function only
-
 def login_page(parent):
-    geometry = calculate_geometry(parent,LOGIN_SIZE)
+    geometry = controller.calculate_geometry(parent,LOGIN_SIZE)
     parent.destroy()
     root = Tk()
     root.title("Show Time! - Iniciar Sessão")
     root.geometry(geometry)
     root.resizable(False,False)
-    Label(root, text="Bem-vindo ao Show Time!", padx=10,pady=10).grid(column=0,row=0, sticky=W)
+    Label(root, text="Bem-vindo ao Show Time!", padx=10,pady=10).place(x=10,y=10)
     #Email
     user_email = StringVar()
-    Label(root, text="Email", padx=10,pady=10).grid(column=0,row=1, sticky=W)
-    Entry(root,width=30,borderwidth=2,textvariable=user_email).grid(column=1,row=1)
+    Label(root, text="Email", padx=10,pady=10).place(x=10,y=50)
+    Entry(root,width=30,borderwidth=2,textvariable=user_email).place(x=100,y=50)
     #Password
     user_password = StringVar()
-    Label(root, text="Password", padx=10,pady=10).grid(column=0,row=2, sticky=W)
-    Entry(root,width=30,borderwidth=2, textvariable=user_password, show="*").grid(column=1,row=2)
+    Label(root, text="Password", padx=10,pady=10).place(x=10,y=100)
+    Entry(root,width=30,borderwidth=2, textvariable=user_password, show="*").place(x=100,y=100)
     #Button
-    Button(root,text="Entrar",bg="#b2cadb",width=10,height=2,command=lambda:autenticate_user(root,user_email.get(),user_password.get())).grid(column=0,row=3)
-    Button(root,text="Registar",bg="#b2cadb",width=10,height=2,command=lambda:register_page(root)).grid(column=1,row=3)
+    Button(root,text="Entrar",bg="#b2cadb",width=10,height=2,command=lambda:autenticate_user(root,user_email.get(),user_password.get())).place(x=10,y=150)
+    Button(root,text="Registar",bg="#b2cadb",width=10,height=2,command=lambda:register_page(root)).place(x=100,y=150)
+    Button(root,text="Voltar",bg="#b2cadb",command=lambda:show_area(root), width=10,height=2).place(x=10,y=300)
+    Button(root,text="Entrar como Administrador",bg="#b2cadb",height=2).place(x=100,y=300)
     root.mainloop()
 #------------------------------------------------------------------------------------------------------------------------
 # REGISTER WINDOW ------------------------------------------------------------
@@ -74,7 +64,7 @@ def registrate_user(parent,email,name,password):
         user_area(parent,control)
 
 def register_page(parent): 
-    geometry = calculate_geometry(parent,REGISTER_SIZE)
+    geometry = controller.calculate_geometry(parent,REGISTER_SIZE)
     parent.destroy()
     root = Tk()
     root.title("Show Time! - Registo")
@@ -101,7 +91,7 @@ def register_page(parent):
 #------------------------------------------------------------------------------------------------------------------------
 # USER AREA -----------------------------------------
 def user_area(parent,session):
-    geometry = calculate_geometry(parent,USER_AREA_SIZE)
+    geometry = controller.calculate_geometry(parent,USER_AREA_SIZE)
     parent.destroy()
     root = Tk()
     root.title(f"Show Time! - Área do utilizador - {session.getFullName()}")
@@ -152,7 +142,7 @@ def reservation_info(parent,session,reservation):
             if(shows.getID() == curr_reserv.getShowID()):
                 curr_show = shows #get respective show object
         info_window.title(f"Informações - #{curr_reserv.getID()}")
-        geometry = calculate_geometry(parent,RESERVATION_INFO_SIZE)
+        geometry = controller.calculate_geometry(parent,RESERVATION_INFO_SIZE)
         info_window.geometry(geometry)
         info_window.config(bg=BG1)
         Label(info_window, text=f"Nome do Espetáculo: {curr_reserv.getShowName()}", font=("Arial", 9), bg=BG1).grid(row=0, column=0, sticky=W)
@@ -169,7 +159,7 @@ def confirm_refund(parent,session,info_window,reservation,show,seat_number):
     reservation_id = controller.clear_order(reservation,show,seat_number)
     confirm_refund_window = Toplevel(info_window)
     confirm_refund_window.title(f"Lugar Reembolsado - Este lugar já não lhe pertence!")
-    geometry = calculate_geometry(parent,REFUND_RESERVATION_SIZE)
+    geometry = controller.calculate_geometry(parent,REFUND_RESERVATION_SIZE)
     confirm_refund_window.geometry(geometry)
     confirm_refund_window.config(bg=BG1)
     Label(confirm_refund_window, text=f"Bilhete número #{reservation_id} reembolsado!", font=("Arial", 12), bg=BG1).grid(row=0, column=0, sticky=W)
@@ -178,7 +168,7 @@ def confirm_refund(parent,session,info_window,reservation,show,seat_number):
 def confirm_seat_change(parent,session,info_window,reservation,show,seat_number): 
     seat_change_window = Toplevel(info_window)
     seat_change_window.title(f"Alterar Reserva")
-    geometry = calculate_geometry(parent,CONFIRM_CHANGE_SIZE)
+    geometry = controller.calculate_geometry(parent,CONFIRM_CHANGE_SIZE)
     seat_change_window.geometry(geometry)
     seat_change_window.config(bg=BG1)
     Label(seat_change_window, text=f"{session.getFullName()}, selecione um novo lugar:", font=("Arial", 12), bg=BG1).grid(row=0, column=0, sticky=W)
@@ -195,7 +185,7 @@ def choice(parent,option):
 # SHOW AREA -----------------------------------------
 def show_area(parent=None,session=None):
     if(parent is not None):
-        geometry = calculate_geometry(parent,SHOW_AREA_SIZE)
+        geometry = controller.calculate_geometry(parent,SHOW_AREA_SIZE)
         parent.destroy()
     else:
         geometry = str(SHOW_AREA_SIZE[0])+"x"+str(SHOW_AREA_SIZE[1])
@@ -246,7 +236,7 @@ def show_info(parent,session,show):
             if(shows.getID() == show_id):
                 curr_show = shows #Get respective show object
         info_window.title(f"Informação do Espetáculo - #{curr_show.getID()}")
-        geometry = calculate_geometry(parent,SHOW_INFO_SIZE)
+        geometry = controller.calculate_geometry(parent,SHOW_INFO_SIZE)
         info_window.geometry(geometry)
         info_window.config(bg=BG1)
         Label(info_window, text=f"Nome do Espetáculo: {curr_show.getShowName()}", font=("Arial", 9), bg=BG1).grid(row=0, column=0, sticky=W)
@@ -294,7 +284,7 @@ def show_room(parent,session,info_window,show,seat_change=None): #Print the room
 def order(parent,session,info_window,seat_number,show): #Order Confirmation Window
     order_window = Toplevel(info_window)
     order_window.title(f"Confirmar lugar {seat_number} - {show.getShowName()}")
-    geometry = calculate_geometry(info_window,ORDER_SIZE)
+    geometry = controller.calculate_geometry(info_window,ORDER_SIZE)
     order_window.geometry(geometry)
     order_window.config(bg=BG1)
     Label(order_window, text="Por Favor confirme a reserva deste bilhete:", font=("Arial", 12), bg=BG1).grid(row=0, column=0, sticky=W)
@@ -311,7 +301,7 @@ def confirm_order(parent,session,order_window,seat_number,show):
     reservation_id = controller.order_ticket(session,show,seat_number)
     confirm_order_window = Toplevel(order_window)
     confirm_order_window.title(f"Lugar Reservado!")
-    geometry = calculate_geometry(order_window,CONFIRM_ORDER_SIZE)
+    geometry = controller.calculate_geometry(order_window,CONFIRM_ORDER_SIZE)
     confirm_order_window.geometry(geometry)
     confirm_order_window.config(bg=BG1)
     Label(confirm_order_window, text=f"Bilhete número #{reservation_id} reservado!", font=("Arial", 12), bg=BG1).grid(row=0, column=0, sticky=W)

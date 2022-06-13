@@ -194,3 +194,11 @@ def clear_order(reservation, show, seat_number):
             show.setSeatOccupancy(seat_number, False)
             break
     return reservation.getID()
+
+#Calculate where the window should appear (Always open in the middle)(can be tweak to be able to open where we want)
+def calculate_geometry(root,size:tuple):
+    curr_w = size[0]
+    curr_h = size[1]
+    x = root.winfo_x()
+    y = root.winfo_y()
+    return str(curr_w)+"x"+str(curr_h)+"+"+str(x)+"+"+str(y) #string for Tk().geometry function only
