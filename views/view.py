@@ -110,9 +110,9 @@ def user_area(parent,session):
             SHOW.append(f"#{reservations.getID()} - {reservations.getShowName()} [{reservations.getSeatNumber()}]")
     options = StringVar(root)
     if(len(SHOW) == 0): 
-        options.set("None")
-        option_menu = OptionMenu(root, options,"None")
-    else:
+        options.set("Sem reservas")
+        option_menu = OptionMenu(root, options,"Sem reservas")
+    else: 
         options.set(SHOW[0]) # default value
         option_menu = OptionMenu(root, options, *SHOW)
     option_menu.grid(row=2,column=0,sticky=W)
@@ -129,7 +129,7 @@ def user_area(parent,session):
 
 #pop up da info dos bilhetes - window
 def reservation_info(parent,session,reservation):
-    if(reservation.get() != "None"):
+    if(reservation.get() != "Sem reservas"):
         info_window = Toplevel(parent) # Criar uma página em cima da página atual
         reservation_id = reservation.get()[1:5]
         curr_reserv = None # Reservation Object
@@ -204,8 +204,8 @@ def show_area(parent=None,session=None):
         SHOW.append(f"#{shows.getID()} - {shows.getShowName()} [{shows.getDate()}]")
     options = StringVar(root)
     if(len(SHOW) == 0): #Caso não exista espetáculos
-        options.set("None")
-        option_menu = OptionMenu(root, options,"None")
+        options.set("Sem Espetáculos")
+        option_menu = OptionMenu(root, options,"Sem Espetáculos")
     else: 
         options.set(SHOW[0]) # default value
         option_menu = OptionMenu(root, options, *SHOW)
@@ -226,7 +226,7 @@ def show_area(parent=None,session=None):
 
 #pop up da info de cada espetáculo - window
 def show_info(parent,session,show):
-    if(show.get() != "None"):
+    if(show.get() != "Sem Espetáculos"):
         info_window = Toplevel(parent) # Criar uma página em cima da página atual
         show_id = int(show.get()[1:(indexOf(show.get(),"-")-1)])
         curr_show = None #Show Object
