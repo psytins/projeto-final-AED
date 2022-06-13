@@ -161,13 +161,22 @@ def registrate_user(name, email, password):
     model.User_List.append(temp_user_obj)
     return temp_user_obj
 
-def authenticate_user(email,password):
+def authenticate_user(email,password,admin:bool):
     if(email == "" or password == ""):
         return -2 # Tem que preencher os espaços
     curr_user = None
     for users in model.User_List:
         if(users.getEmail() == email):
-            curr_user = users
+            if(admin is not False): 
+                if(users.isAdmin() is not admin):
+                    return -3 #User is not admin
+                else:
+                    curr_user = users
+            else:
+                if(users.isAdmin() is admin):
+                    curr_user = users
+                else:
+                    return 0
     if(curr_user == None): return 0 #User don't exist
     if(curr_user.getPassword() == password): return curr_user #Auth completed
     else: return -1 #Password don't match

@@ -19,14 +19,16 @@ BG1="#a3a3a3"
 ###########################################################################
 ###########################################################################
 # LOGIN WINDOW ------------------------------------------------------------
-def autenticate_user(parent,email,password):
-    auth = controller.authenticate_user(email,password)
+def autenticate_user(parent,email,password,admin):
+    auth = controller.authenticate_user(email,password,admin)
     if(auth == 0): 
         Label(parent, text="O utilizador não existe",pady=10,fg="red",width=35,anchor=W).grid(column=0,row=4, sticky=W)
     elif(auth == -1):
         Label(parent, text="A palavra passe está incorreta",pady=10,fg="red",width=35,anchor=W).grid(column=0,row=4, sticky=W)
     elif(auth == -2):
         Label(parent, text="Tem que preencher todos os espaços",pady=10,fg="red").grid(column=0,row=4, sticky=W)
+    elif(auth == -3):
+        Label(parent, text="O utilizador não é administrador",pady=10,fg="red").grid(column=0,row=4, sticky=W)
     else:
         user_area(parent,auth)
 
@@ -47,10 +49,31 @@ def login_page(parent):
     Label(root, text="Password", padx=10,pady=10).place(x=10,y=100)
     Entry(root,width=30,borderwidth=2, textvariable=user_password, show="*").place(x=100,y=100)
     #Button
-    Button(root,text="Entrar",bg="#b2cadb",width=10,height=2,command=lambda:autenticate_user(root,user_email.get(),user_password.get())).place(x=10,y=150)
+    Button(root,text="Entrar",bg="#b2cadb",width=10,height=2,command=lambda:autenticate_user(root,user_email.get(),user_password.get(),False)).place(x=10,y=150)
     Button(root,text="Registar",bg="#b2cadb",width=10,height=2,command=lambda:register_page(root)).place(x=100,y=150)
     Button(root,text="Voltar",bg="#b2cadb",command=lambda:show_area(root), width=10,height=2).place(x=10,y=300)
-    Button(root,text="Entrar como Administrador",bg="#b2cadb",height=2).place(x=100,y=300)
+    Button(root,text="Entrar como Administrador",bg="#b2cadb",height=2,command=lambda:login_page_admin(root)).place(x=100,y=300)
+    root.mainloop()
+
+def login_page_admin(parent):
+    geometry = controller.calculate_geometry(parent,LOGIN_SIZE)
+    parent.destroy()
+    root = Tk()
+    root.title("Show Time! - Iniciar Sessão - Administrador")
+    root.geometry(geometry)
+    root.resizable(False,False)
+    Label(root, text="Bem-vindo Administrador!", padx=10,pady=10).place(x=10,y=10)
+    #Email
+    user_email = StringVar()
+    Label(root, text="Email", padx=10,pady=10).place(x=10,y=50)
+    Entry(root,width=30,borderwidth=2,textvariable=user_email).place(x=100,y=50)
+    #Password
+    user_password = StringVar()
+    Label(root, text="Password", padx=10,pady=10).place(x=10,y=100)
+    Entry(root,width=30,borderwidth=2, textvariable=user_password, show="*").place(x=100,y=100)
+    #Button
+    Button(root,text="Entrar",bg="#b2cadb",width=10,height=2,command=lambda:autenticate_user(root,user_email.get(),user_password.get(),True)).place(x=10,y=150)
+    Button(root,text="Voltar",bg="#b2cadb",command=lambda:login_page(root), width=10,height=2).place(x=10,y=300)
     root.mainloop()
 #------------------------------------------------------------------------------------------------------------------------
 # REGISTER WINDOW ------------------------------------------------------------
