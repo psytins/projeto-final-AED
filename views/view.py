@@ -14,7 +14,7 @@ SHOW_INFO_SIZE = (900,500) #Show Info Page
 ORDER_SIZE = (500,200) #Order Page
 CONFIRM_ORDER_SIZE = (300,50) #Confirm Order Page
 #Window Color
-BG1="#bbbbbb"
+BG1="#a3a3a3"
 ###########################################################################
 ###########################################################################
 ###########################################################################
@@ -123,6 +123,8 @@ def user_area(parent,session):
     root.config(bg=BG1)
     #texto
     Label(root, text="Escolha o bilhete", font=("Verdana", 16), background="#7eb6de").grid(row=0, column=0, sticky=W)
+    #separaçao
+    Label(root, text=" ", bg=BG1).grid(row=1, column=0)
     #dropdown 
     #Get reservation 
     SHOW = list()
@@ -136,12 +138,9 @@ def user_area(parent,session):
     else: 
         options.set(SHOW[0]) # default value
         option_menu = OptionMenu(root, options, *SHOW)
-    option_menu.grid(row=1,column=0,sticky=W)
+    option_menu.grid(row=2,column=0,sticky=W)
     #botao na area do user para redirecionar para a info window
-    Button(root, text="Ver Bilhete", command=lambda:reservation_info(root,session,options), width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=0, row=2)
-    #Separação
-    Label(root, text=" ", bg="#bbbbbb").grid(row=4, column=0)
-    Label(root, text=" ", bg="#bbbbbb").grid(row=5, column=0)
+    Button(root, text="Ver Bilhete", command=lambda:reservation_info(root,session,options), width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=0, row=3)
     #Informação do utilizador
     #nome do user
     Label(root, text=f"Bem-Vindo, {session.getFullName()}", font=("Arial", 9), justify="right", bg=BG1).place(x=510,y=10)
@@ -218,7 +217,9 @@ def show_area(parent=None,session=None):
     root.resizable(False,False)
     root.config(bg=BG1)
     #texto
-    Label(root, text="Escolha o espetáculo que queira ver", font=("Verdana", 16), background="#7eb6de").grid(row=0, column=0, sticky=W)
+    Label(root, text="Escolha o espetáculo que queira ver", font=("Verdana", 16), background="#7dd1bf").grid(row=0, column=0, sticky=W)
+    #separaçao
+    Label(root, text=" ", bg=BG1).grid(row=1, column=0)
     #dropdown 
     #Get all shows 
     SHOW = list()
@@ -231,20 +232,17 @@ def show_area(parent=None,session=None):
     else: 
         options.set(SHOW[0]) # default value
         option_menu = OptionMenu(root, options, *SHOW)
-    option_menu.grid(row=1,column=0,sticky=W)
+    option_menu.grid(row=2,column=0,sticky=W)
     #Botão para redirecionar 
-    Button(root, text="Ver Espetáculo", command= lambda:show_info(root,session,options),width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=0, row=2,sticky=W)
-    #Separação
-    Label(root, text=" ", bg="#bbbbbb").grid(row=3, column=0)
-    Label(root, text=" ", bg="#bbbbbb").grid(row=4, column=0)
+    Button(root, text="Ver Espetáculo", command= lambda:show_info(root,session,options),width=30, height=3, font=("Arial", 11, "bold"), bg="#2a9c83").grid(column=0, row=3,sticky=W)
     #Info do user
     if(session == None):
         Label(root,text="Sem sessão iniciada", font=("Arial", 9), justify="right", bg=BG1).place(x=570,y=430)
-        Button(root,text="Iniciar Sessão",width=15,height=2, font=("Arial", 9, "bold"), background="#b2cadb", command=lambda:login_page(root)).place(x=580,y=453)
+        Button(root,text="Iniciar Sessão",width=15,height=2, font=("Arial", 9, "bold"), background="#5cedce", command=lambda:login_page(root)).place(x=580,y=453)
     else:
         Label(root, text=f"Bem-Vindo, {session.getFullName()}", font=("Arial", 9), justify="right", bg=BG1).place(x=510,y=10)
-        #botao espaço uutilizador
-        Button(root,text="Espaço do Utilizador",width=16,height=2, font=("Arial", 9, "bold"), background="#3f6f91", command=lambda:user_area(root,session)).place(x=560,y=450)
+        #botao espaço utilizador
+        Button(root,text="Espaço do Utilizador",width=16,height=2, font=("Arial", 9, "bold"), background="#5cedce", command=lambda:user_area(root,session)).place(x=560,y=450)
         #encerrar sessao
         Button(root,text="Encerrar Sessão",width=15,height=2, font=("Arial", 9, "bold"), background="red", command=lambda:show_area(root)).place(x=570,y=30)
     root.mainloop()
