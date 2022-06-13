@@ -116,6 +116,7 @@ def user_area(parent,session):
         options.set(SHOW[0]) # default value
         option_menu = OptionMenu(root, options, *SHOW)
     option_menu.grid(row=2,column=0,sticky=W)
+    option_menu.config(bg="#accce3")
     #botao na area do user para redirecionar para a info window
     Button(root, text="Ver Bilhete", command=lambda:reservation_info(root,session,options), width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=0, row=3)
     #Informação do utilizador
@@ -210,6 +211,7 @@ def show_area(parent=None,session=None):
         options.set(SHOW[0]) # default value
         option_menu = OptionMenu(root, options, *SHOW)
     option_menu.grid(row=2,column=0,sticky=W)
+    option_menu.config(bg="#9fd1c6")
     #Botão para redirecionar 
     Button(root, text="Ver Espetáculo", command= lambda:show_info(root,session,options),width=30, height=3, font=("Arial", 11, "bold"), bg="#2a9c83").grid(column=0, row=3,sticky=W)
     #Info do user
