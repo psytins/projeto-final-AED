@@ -15,6 +15,7 @@ ORDER_SIZE = (500,200) #Order Page
 CONFIRM_ORDER_SIZE = (300,50) #Confirm Order Page
 #Window Color
 BG1="#a3a3a3"
+BG2="#d1d1d1"
 ###########################################################################
 ###########################################################################
 ###########################################################################
@@ -39,20 +40,21 @@ def login_page(parent):
     root.title("Show Time! - Iniciar Sessão")
     root.geometry(geometry)
     root.resizable(False,False)
-    Label(root, text="Bem-vindo ao Show Time!", padx=10,pady=10).place(x=10,y=10)
+    root.config(bg=BG2)
+    Label(root, text="Bem-vindo ao Show Time!", bg=BG2, padx=10,pady=10).place(x=10,y=10)
     #Email
     user_email = StringVar()
-    Label(root, text="Email", padx=10,pady=10).place(x=10,y=50)
+    Label(root, text="Email", bg=BG2, padx=10,pady=10).place(x=10,y=50)
     Entry(root,width=30,borderwidth=2,textvariable=user_email).place(x=100,y=50)
     #Password
     user_password = StringVar()
-    Label(root, text="Password", padx=10,pady=10).place(x=10,y=100)
+    Label(root, text="Password", bg=BG2, padx=10,pady=10).place(x=10,y=100)
     Entry(root,width=30,borderwidth=2, textvariable=user_password, show="*").place(x=100,y=100)
     #Button
     Button(root,text="Entrar",bg="#b2cadb",width=10,height=2,command=lambda:autenticate_user(root,user_email.get(),user_password.get(),False)).place(x=10,y=150)
-    Button(root,text="Registar",bg="#b2cadb",width=10,height=2,command=lambda:register_page(root)).place(x=100,y=150)
-    Button(root,text="Voltar",bg="#b2cadb",command=lambda:show_area(root), width=10,height=2).place(x=10,y=300)
-    Button(root,text="Entrar como Administrador",bg="#b2cadb",height=2,command=lambda:login_page_admin(root)).place(x=100,y=300)
+    Button(root,text="Registar",bg="#b2cadb",width=10,height=2,command=lambda:register_page(root)).place(x=265,y=150)
+    Button(root,text="Voltar",bg="#a19c9c",command=lambda:show_area(root), width=10,height=2).place(x=10,y=450)
+    Button(root,text="Entrar como Administrador",bg="#dadb86",height=2,command=lambda:login_page_admin(root)).place(x=190,y=450)
     root.mainloop()
 
 def login_page_admin(parent):
@@ -62,18 +64,19 @@ def login_page_admin(parent):
     root.title("Show Time! - Iniciar Sessão - Administrador")
     root.geometry(geometry)
     root.resizable(False,False)
-    Label(root, text="Bem-vindo Administrador!", padx=10,pady=10).place(x=10,y=10)
+    root.config(bg=BG2)
+    Label(root, text="Bem-vindo Administrador!", bg=BG2, padx=10,pady=10).place(x=10,y=10)
     #Email
     user_email = StringVar()
-    Label(root, text="Email", padx=10,pady=10).place(x=10,y=50)
+    Label(root, text="Email", bg=BG2, padx=10,pady=10).place(x=10,y=50)
     Entry(root,width=30,borderwidth=2,textvariable=user_email).place(x=100,y=50)
     #Password
     user_password = StringVar()
-    Label(root, text="Password", padx=10,pady=10).place(x=10,y=100)
+    Label(root, text="Password", bg=BG2, padx=10,pady=10).place(x=10,y=100)
     Entry(root,width=30,borderwidth=2, textvariable=user_password, show="*").place(x=100,y=100)
     #Button
     Button(root,text="Entrar",bg="#b2cadb",width=10,height=2,command=lambda:autenticate_user(root,user_email.get(),user_password.get(),True)).place(x=10,y=150)
-    Button(root,text="Voltar",bg="#b2cadb",command=lambda:login_page(root), width=10,height=2).place(x=10,y=300)
+    Button(root,text="Voltar",bg="#a19c9c",command=lambda:login_page(root), width=10,height=2).place(x=10,y=450)
     root.mainloop()
 #------------------------------------------------------------------------------------------------------------------------
 # REGISTER WINDOW ------------------------------------------------------------
@@ -93,23 +96,24 @@ def register_page(parent):
     root.title("Show Time! - Registo")
     root.geometry(geometry)
     root.resizable(False,False)
-    Label(root, text="Bem-vindo/a ao Show Time!", padx=10,pady=10).grid(column=0,row=0, sticky=W)
-    Label(root, text="Crie a sua conta!", padx=5,pady=6).grid(column=0,row=1, sticky=W)
+    root.config(bg=BG2)
+    Label(root, text="Bem-vindo/a ao Show Time!", bg=BG2, padx=10,pady=10).grid(column=0,row=0, sticky=W)
+    Label(root, text="Crie a sua conta!", bg=BG2, padx=5,pady=6).grid(column=0,row=1, sticky=W)
     #Full Name
     regist_name = StringVar()
-    Label(root, text="Nome Completo", padx=10,pady=10).grid(column=0,row=2, sticky=W)
+    Label(root, text="Nome Completo", padx=10,pady=10, bg=BG2).grid(column=0,row=2, sticky=W)
     Entry(root,width=30,borderwidth=2,textvariable=regist_name).grid(column=1,row=2)
     #Email
     regist_email = StringVar()
-    Label(root, text="E-mail", padx=10,pady=10).grid(column=0,row=3, sticky=W)
+    Label(root, text="E-mail", bg=BG2, padx=10,pady=10).grid(column=0,row=3, sticky=W)
     Entry(root,width=30,borderwidth=2,textvariable=regist_email).grid(column=1,row=3)
     #Password
     regist_password = StringVar()
-    Label(root, text="Password", padx=10,pady=10).grid(column=0,row=4, sticky=W)
+    Label(root, text="Password", bg=BG2, padx=10,pady=10).grid(column=0,row=4, sticky=W)
     Entry(root,width=30,borderwidth=2,textvariable=regist_password,show="*").grid(column=1,row=4)
     #Button
     Button(root,text="Registo",bg="#b2cadb",width=10,height=2,command=lambda:registrate_user(root,regist_email.get(),regist_name.get(),regist_password.get())).grid(column=0,row=5)
-    Button(root,text="Já tenho conta",bg="#b2cadb",width=10,height=2,command=lambda:login_page(root)).grid(column=1,row=5)
+    Button(root,text="Já tenho conta",bg="#b2cadb",width=12,height=2,command=lambda:login_page(root)).grid(column=1,row=5)
     root.mainloop()
 #------------------------------------------------------------------------------------------------------------------------
 # USER AREA -----------------------------------------
@@ -123,15 +127,15 @@ def user_area(parent,session):
     root.config(bg=BG1)
     if session.isAdmin() == True:
         #texto
-        Label(root, text="Ferramentas de Administrador", font=("Verdana", 16), bg="#f6fa0f").grid(row=0, column=0, sticky=W)
+        Label(root, text="Ferramentas de Administrador", font=("Verdana", 16), bg="#fdff3d").grid(row=0, column=0, sticky=W)
         #separação
         Label(root, text=" ", bg=BG1).grid(row=1, column=0)
         #botao para adicionar o espetaculo FAZER A FUNÇAO PARA ADICIONAR OS ESPETACULOS
-        Button(root, text="Adicionar Espetáculo", width=30, height=3, font=("Arial", 11, "bold"), bg="#f5f757").grid(column=0, row=2, sticky=W)
+        Button(root, text="Adicionar Espetáculo", width=30, height=3, font=("Arial", 11, "bold"), bg="#fdff85").grid(column=0, row=2, sticky=W)
         #separaçao
         Label(root, text=" ", bg=BG1).grid(row=3, column=0)
         #botao para remover espetaculos
-        Button(root, text="Remover Espetáculo", width=30, height=3, font=("Arial", 11, "bold"), bg="#c8c957").grid(column=0, row=4, sticky=W)
+        Button(root, text="Remover Espetáculo", width=30, height=3, font=("Arial", 11, "bold"), bg="#fdff85").grid(column=0, row=4, sticky=W)
     else:
         #texto
         Label(root, text="Escolha o bilhete", font=("Verdana", 16), background="#7eb6de").grid(row=0, column=0, sticky=W)
@@ -160,7 +164,7 @@ def user_area(parent,session):
     #botao logout
     Button(root,text="Encerrar Sessão",width=15,height=2, font=("Arial", 9, "bold"), background="red", command=lambda:show_area(root)).place(x=570,y=30)
     #botao pagina principal
-    Button(root, text="Ver Espetáculos", font=("Arial", 9, "bold"), width=15, height=2, bg="#3f6f91", command=lambda:show_area(root,session)).place(x=560,y=450)
+    Button(root, text="Ver Espetáculos", font=("Arial", 9, "bold"), width=15, height=2, bg="#3f6f91", command=lambda:show_area(root,session)).place(x=570,y=450)
     root.mainloop()
 
 #pop up da info dos bilhetes - window
