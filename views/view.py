@@ -121,27 +121,39 @@ def user_area(parent,session):
     root.geometry(geometry)
     root.resizable(False,False)
     root.config(bg=BG1)
-    #texto
-    Label(root, text="Escolha o bilhete", font=("Verdana", 16), background="#7eb6de").grid(row=0, column=0, sticky=W)
-    #separaçao
-    Label(root, text=" ", bg=BG1).grid(row=1, column=0)
-    #dropdown 
-    #Get reservation 
-    SHOW = list()
-    for reservations in controller.model.Reservation_List:
-        if(reservations.getUserID() == session.getID()):
-            SHOW.append(f"#{reservations.getID()} - {reservations.getShowName()} [{reservations.getSeatNumber()}]")
-    options = StringVar(root)
-    if(len(SHOW) == 0): 
-        options.set("Sem reservas")
-        option_menu = OptionMenu(root, options,"Sem reservas")
-    else: 
-        options.set(SHOW[0]) # default value
-        option_menu = OptionMenu(root, options, *SHOW)
-    option_menu.grid(row=2,column=0,sticky=W)
-    option_menu.config(bg="#accce3")
-    #botao na area do user para redirecionar para a info window
-    Button(root, text="Ver Bilhete", command=lambda:reservation_info(root,session,options), width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=0, row=3)
+    if session.isAdmin() == True:
+        #texto
+        Label(root, text="Ferramentas de Administrador", font=("Verdana", 16), bg="#f6fa0f").grid(row=0, column=0, sticky=W)
+        #separação
+        Label(root, text=" ", bg=BG1).grid(row=1, column=0)
+        #botao para adicionar o espetaculo FAZER A FUNÇAO PARA ADICIONAR OS ESPETACULOS
+        Button(root, text="Adicionar Espetáculo", width=30, height=3, font=("Arial", 11, "bold"), bg="#f5f757").grid(column=0, row=2, sticky=W)
+        #separaçao
+        Label(root, text=" ", bg=BG1).grid(row=3, column=0)
+        #botao para remover espetaculos
+        Button(root, text="Remover Espetáculo", width=30, height=3, font=("Arial", 11, "bold"), bg="#c8c957").grid(column=0, row=4, sticky=W)
+    else:
+        #texto
+        Label(root, text="Escolha o bilhete", font=("Verdana", 16), background="#7eb6de").grid(row=0, column=0, sticky=W)
+        #separaçao
+        Label(root, text=" ", bg=BG1).grid(row=1, column=0)
+        #dropdown 
+        #Get reservation 
+        SHOW = list()
+        for reservations in controller.model.Reservation_List:
+            if(reservations.getUserID() == session.getID()):
+                SHOW.append(f"#{reservations.getID()} - {reservations.getShowName()} [{reservations.getSeatNumber()}]")
+        options = StringVar(root)
+        if(len(SHOW) == 0): 
+            options.set("Sem reservas")
+            option_menu = OptionMenu(root, options,"Sem reservas")
+        else: 
+            options.set(SHOW[0]) # default value
+            option_menu = OptionMenu(root, options, *SHOW)
+        option_menu.grid(row=2,column=0,sticky=W)
+        option_menu.config(bg="#accce3")
+        #botao na area do user para redirecionar para a info window
+        Button(root, text="Ver Bilhete", command=lambda:reservation_info(root,session,options), width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=0, row=3)
     #Informação do utilizador
     #nome do user
     Label(root, text=f"Bem-Vindo, {session.getFullName()}", font=("Arial", 9), justify="right", bg=BG1).place(x=510,y=10)
@@ -240,7 +252,7 @@ def show_area(parent=None,session=None):
         option_menu = OptionMenu(root, options, *SHOW)
     option_menu.grid(row=2,column=0,sticky=W)
     option_menu.config(bg="#9fd1c6")
-    #Botão para redirecionar 
+    #Botão para redirecionar
     Button(root, text="Ver Espetáculo", command= lambda:show_info(root,session,options),width=30, height=3, font=("Arial", 11, "bold"), bg="#2a9c83").grid(column=0, row=3,sticky=W)
     #Info do user
     if(session == None):
@@ -272,7 +284,7 @@ def show_info(parent,session,show):
         Label(info_window, text=f"Descrição: {curr_show.getDescription()}", font=("Arial", 9), bg=BG1).grid(row=2, column=0, sticky=W)
         # Tabela de Preços ---
         Label(info_window, text=f"----------------------------------------------", font=("Arial", 9), bg=BG1).grid(row=3, column=0, sticky=W)
-        Label(info_window, text=f"Tabela de Preços", font=("Arial", 9), bg=BG1).grid(row=4, column=0, sticky=W)
+        Label(info_window, text=f"Tabela de Preços:", font=("Arial", 9), bg=BG1).grid(row=4, column=0, sticky=W)
         Label(info_window, text=f"Preço NORMAL - 4,00€", font=("Arial", 9), bg=BG1).grid(row=5, column=0, sticky=W)
         Label(info_window, text=f"Preço VIP - 12,00€", font=("Arial", 9), bg=BG1).grid(row=6, column=0, sticky=W)
         Label(info_window, text=f"----------------------------------------------", font=("Arial", 9), bg=BG1).grid(row=7, column=0, sticky=W)
