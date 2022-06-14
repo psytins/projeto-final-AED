@@ -2,7 +2,7 @@ from operator import indexOf
 from tkinter import *
 import controllers.controller as controller
 #Window Settings ------------------------------------------------------------
-#Window Size --> Tuple : (x,y) 
+#Window Sizes --> Tuple : (x,y) 
 LOGIN_SIZE = (350,500) #Login Page
 REGISTER_SIZE = (350,500) #Register Page
 USER_AREA_SIZE = (700,500) #User Area Page
@@ -13,8 +13,8 @@ SHOW_AREA_SIZE = (700,500) #Show Area Page
 SHOW_INFO_SIZE = (900,500) #Show Info Page 
 ORDER_SIZE = (500,200) #Order Page
 CONFIRM_ORDER_SIZE = (300,50) #Confirm Order Page
-#Window Color
-BG1="#a3a3a3"
+#Window Colors
+BG1 = "#a3a3a3"
 BG2="#d1d1d1"
 ###########################################################################
 ###########################################################################
@@ -223,12 +223,17 @@ def choice(parent,option):
 #------------------------------------------------------------------------------------------------------------------------
 # SHOW AREA -----------------------------------------
 def show_area(parent=None,session=None):
+    root = Tk()
     if(parent is not None):
         geometry = controller.calculate_geometry(parent,SHOW_AREA_SIZE)
         parent.destroy()
     else:
-        geometry = str(SHOW_AREA_SIZE[0])+"x"+str(SHOW_AREA_SIZE[1])
-    root = Tk()
+        ws = root.winfo_screenwidth() # width of the screen
+        hs = root.winfo_screenheight() # height of the screen
+        #Calculate the x and y to pop the window in the middle of the screen
+        x = int((ws/2) - (SHOW_AREA_SIZE[0]/2))
+        y = int((hs/2) - (SHOW_AREA_SIZE[1]/2))
+        geometry = str(SHOW_AREA_SIZE[0])+"x"+str(SHOW_AREA_SIZE[1])+"+"+str(x)+"+"+str(y)
     root.title(f"Show Time! - Ver Espetáculo")
     root.geometry(geometry)
     root.resizable(False,False)
