@@ -10,7 +10,7 @@ RESERVATION_INFO_SIZE = (500,200) #Reservation Info Page
 CONFIRM_CHANGE_SIZE = (1100,500) #Confirm Seat Change Page
 REFUND_RESERVATION_SIZE = (300,50) #Confirm Reservation Refund Page
 SHOW_AREA_SIZE = (700,500) #Show Area Page 
-SHOW_INFO_SIZE = (900,500) #Show Info Page 
+SHOW_INFO_SIZE = (1100,500) #Show Info Page 
 ORDER_SIZE = (500,200) #Order Page
 CONFIRM_ORDER_SIZE = (300,50) #Confirm Order Page
 #Window Colors
@@ -296,9 +296,13 @@ def show_info(parent,session,show):
         Label(info_window, text=" ", bg=BG1).grid(row=8, column=0)
         if(session == None):
             Label(info_window, text="Inicie sessão para reservar bilhetes", font=("Arial", 9), bg=BG1).grid(row=9, column=0, sticky=W)
+        elif(session.isAdmin() == True):
+            show_room(parent,session,info_window,curr_show) #Room will show with all buttons disabled
+            #Label(info_window, text="Adicionar uma nova data para este espetáculo ", bg=BG1).grid(row=19, column=0)
+            Button(info_window, text="Adicionar uma nova data para este espetáculo", bg="gray").grid(row=20, column=0)
         else:
             show_room(parent,session,info_window,curr_show)
-        Button(info_window, text="Cancel", command = lambda: choice(info_window,"cancel"), bg="gray").grid(row=20, column=0)
+        Button(info_window, text="Cancel", command = lambda: choice(info_window,"cancel"), bg="gray").grid(row=20, column=1)
 
 def show_room(parent,session,info_window,show,seat_change=None): #Print the room in form of buttons
     room = show.getRoom()
@@ -309,14 +313,20 @@ def show_room(parent,session,info_window,show,seat_change=None): #Print the room
                 Label(info_window, text=show.getSeatNumber((l,c))[1:], font=("Arial", 9), bg=BG1).grid(row=l+4, column=c+5)
             seat_number = show.getSeatNumber((l,c))
             if(room[l][c] == "N0"):
-                Button(info_window,text=" ",padx=16,pady=2,command=lambda seat_number=seat_number:order(parent,session,info_window,seat_number,show)).grid(column=c+5,row=l+5)
+                if(session.isAdmin() == True):
+                    Button(info_window,text=" ",padx=16,pady=2,state=DISABLED).grid(column=c+5,row=l+5)
+                else:
+                    Button(info_window,text=" ",padx=16,pady=2,command=lambda seat_number=seat_number:order(parent,session,info_window,seat_number,show)).grid(column=c+5,row=l+5)
             elif(room[l][c] == "N1"):
                 if(seat_change is not None and show.getSeatNumber((l,c)) == seat_change): 
                     Button(info_window,text=" ",bg='green',padx=16,pady=2,command=lambda seat_number=seat_number:order(parent,session,info_window,seat_number,show)).grid(column=c+5,row=l+5)
                 else:
                     Button(info_window,text=" ",bg='red',padx=16,pady=2,state=DISABLED).grid(column=c+5,row=l+5)                
             elif(room[l][c] == "V0"):
-                Button(info_window,text="VIP",padx=10,pady=2,command=lambda seat_number=seat_number:order(parent,session,info_window,seat_number,show)).grid(column=c+5,row=l+5)
+                if(session.isAdmin() == True):
+                    Button(info_window,text="VIP",padx=10,pady=2,state=DISABLED).grid(column=c+5,row=l+5)
+                else:
+                    Button(info_window,text="VIP",padx=10,pady=2,command=lambda seat_number=seat_number:order(parent,session,info_window,seat_number,show)).grid(column=c+5,row=l+5)
             elif(room[l][c] == "V1"):
                 if(seat_change is not None and show.getSeatNumber((l,c)) == seat_change): 
                     Button(info_window,text="VIP",bg='green',padx=16,pady=2,command=lambda seat_number=seat_number:order(parent,session,info_window,seat_number,show)).grid(column=c+5,row=l+5)
