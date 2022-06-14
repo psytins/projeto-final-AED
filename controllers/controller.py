@@ -115,7 +115,7 @@ def save():
 #Esta função vai retornar ids que não existam registados para novos registos de utilizador
 def create_user_id():
     tmp_verify = []
-    id_verify = 20000
+    id_verify = 20000 #id seed
     #adicionei os ids existentes a uma lista temporaria
     for x in range(len(model.User_List)):
         tmp_verify.append(model.User_List[x].getID())
@@ -204,7 +204,7 @@ def clear_order(reservation, show, seat_number):
             break
     return reservation.getID()
 
-#Calculate where the window should appear (Always open in the middle)(can be tweak to be able to open where we want)
+#Calculate where the window should appear, relative to the parent window
 def calculate_geometry(root,size:tuple):
     curr_w = size[0]
     curr_h = size[1]
