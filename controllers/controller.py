@@ -1,3 +1,4 @@
+from statistics import mode
 import models.reservation as reservation
 import models.show as show
 import models.user as user
@@ -197,6 +198,34 @@ def authenticate_user(email,password,admin:bool):
     if(curr_user.getPassword() == password): return curr_user #Auth completed
     else: return -1 #Password don't match
 
+def create_empty_show_room():
+    return [["N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0"],
+           ["N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0"],
+           ["N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0"],
+           ["N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0"],
+           ["N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0"],
+           ["N0","N0","NA","NA","NA","V0","V0","V0","V0","NA","NA","NA","N0","N0"],
+           ["N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0"],
+           ["N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0"],
+           ["N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0"],
+           ["N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0","N0"],
+           ["N0","N0","NA","NA","NA","V0","V0","V0","V0","NA","NA","NA","N0","N0"]]
+
+#Função para criar espetaculos
+def create_show(show_name,show_date,show_description):
+    show_id = create_show_id()
+    room = create_empty_show_room()
+    temp_show_obj = show.Show(show_id,show_name,show_date,show_description,room)
+    model.Show_List.append(temp_show_obj)
+
+#Função para eliminar espetaculo
+def clear_show(show):
+    for i in range(len(model.Show_List)):
+        if(show.getID() == model.Show_List[i].getID()):
+            show_id = model.Show_List.pop(i)
+            break
+    return show_id #Return the deleted show
+
 #Ver se é preciso passar estes parâmetros na função order_tickets
 # A partir do user id e show id temos acesso ao resto, não é preciso ter mais parâmetros
 # VER ONDE CRÍAMOS O CONTROLO PARA VER SE O SEAT ESTÁ OCUPADO OU NÃO:
@@ -216,7 +245,7 @@ def clear_order(reservation, show, seat_number):
     for i in range(len(model.Reservation_List)):
         if(reservation.getID() == model.Reservation_List[i].getID()):
             model.Reservation_List.pop(i)
-            show.setSeatOccupancy(seat_number, False)
+            show.setSeatOccupancy(seat_number, False) #Set the seat to empty
             break
     return reservation.getID()
 
