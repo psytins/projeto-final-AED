@@ -117,20 +117,36 @@ def create_user_id():
     tmp_verify = []
     id_verify = 20000 #id seed
     #adicionei os ids existentes a uma lista temporaria
-    for x in range(len(model.User_List)):
-        tmp_verify.append(model.User_List[x].getID())
+    for users in model.User_List:
+        tmp_verify.append(users.getID())
     #aqui verifiquei se os ids existiam ou não na lista temporária criada
     if id_verify not in tmp_verify:
         return id_verify
     else:
-        for i in range(len(tmp_verify)):
-            if id_verify == tmp_verify[i]:
+        for ids in tmp_verify:
+            if id_verify == ids:
+                id_verify += 1
+        return id_verify
+
+#Esta função vai retornar ids que não existam registados para novos espetaculos
+def create_show_id():
+    tmp_verify = []
+    id_verify = 1 #id seed
+    #adicionei os ids existentes a uma lista temporaria
+    for shows in model.Show_List:
+        tmp_verify.append(shows.getID())
+    #aqui verifiquei se os ids existiam ou não na lista temporária criada
+    if id_verify not in tmp_verify:
+        return id_verify
+    else:
+        for ids in tmp_verify:
+            if id_verify == ids:
                 id_verify += 1
         return id_verify
 
 # Esta função vai retornar ids que não existam registados para novos registos da reserva feita pelo utilizador
 # ID de 4 dígitos hexadecimal
-def generateHexadecimal():
+def generate_hexadecimal():
     final = ""
     for _ in range(4):
         rand_hex = hex(randint(0,15))[2:]
@@ -139,14 +155,14 @@ def generateHexadecimal():
 
 def create_reservation_id(): 
     tmp_verify = []
-    final_rand_string = generateHexadecimal()
+    final_rand_string = generate_hexadecimal()
     for reservation in model.Reservation_List:
         tmp_verify.append(reservation.getID())
     if(len(tmp_verify) == 0):
         return final_rand_string
     else:
         while(final_rand_string in tmp_verify):
-            final_rand_string = generateHexadecimal()
+            final_rand_string = generate_hexadecimal()
         return final_rand_string
 
 #Registar novo utilizador
