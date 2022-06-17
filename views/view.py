@@ -1,6 +1,5 @@
 from operator import indexOf
 from tkinter import *
-from turtle import width
 from tkcalendar import Calendar #Data picker
 import controllers.controller as controller
 #Window Settings ------------------------------------------------------------
@@ -137,26 +136,30 @@ def user_area(parent,session):
         Button(root, text="Adicionar Espetáculo", width=30,height=3,command=lambda:create_show_page(root,session),font=("Arial", 11, "bold"), bg="#fdff85").grid(column=0, row=2, sticky=W)
     else:
         #texto
-        Label(root, text="Escolha o bilhete", font=("Verdana", 16), background="#7eb6de").grid(row=0, column=0, sticky=W)
+        Label(root, text="Escolha o bilhete", font=("Verdana", 16), background="#7eb6de").grid(row=0, column=1, sticky=W)
         #separaçao
         Label(root, text=" ", bg=BG1).grid(row=1, column=0)
+        Label(root, text=" ", bg=BG1).grid(row=1, column=1)
         #List Box  
         #Create a scrollbar
         scrollbar = Scrollbar(root)
-        scrollbar.grid(row=2,column=0)
+        scrollbar.grid(row=2,column=2)
         #Create List Box
-        reservation_list_box = Listbox(root,yscrollcommand=scrollbar.set,width=30)
+        reservation_list_box = Listbox(root,yscrollcommand=scrollbar.set,width=100,height=20)
         for reservations in controller.model.Reservation_List:
             if(reservations.getUserID() == session.getID()):
                 reservation_list_box.insert(END, f"#{reservations.getID()} - {reservations.getShowName()} [{reservations.getSeatNumber()}] - {reservations.getPrice()}€")
-        reservation_list_box.grid(row=2,column=0,sticky=W)
+        reservation_list_box.grid(row=2,column=1,sticky=W)
         scrollbar.config(command=reservation_list_box.yview) #Join the scrollbar with the listbox
-        Button(root, text="Ver Bilhete", command=lambda:list_box_to_reservation(root,session,reservation_list_box), width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=0, row=3)
+        #separaçao
+        Label(root, text=" ", bg=BG1).grid(row=3, column=1)
+        Button(root, text="Ver Bilhete", command=lambda:list_box_to_reservation(root,session,reservation_list_box), width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=1, row=4)
     #Informação do utilizador
     #nome do user
-    Label(root, text=f"Bem-Vindo, {session.getFullName()}", font=("Arial", 9), justify="right", bg=BG1).place(x=510,y=10)
+    Label(root, text=f"Bem-Vindo, {session.getFullName()}", font=("Arial", 9), justify="right", bg=BG1).place(x=420,y=5)
+    Label(root, text=f"Total de reservas: 16,00€", font=("Arial", 9), justify="right", bg=BG1).place(x=420,y=25)
     #botao logout
-    Button(root,text="Encerrar Sessão",width=15,height=2, font=("Arial", 9, "bold"), background="red", command=lambda:show_area(root)).place(x=570,y=30)
+    Button(root,text="Encerrar Sessão",width=15,height=2, font=("Arial", 9, "bold"), background="red", command=lambda:show_area(root)).place(x=570,y=5)
     #botao pagina principal
     Button(root, text="Ver Espetáculos", font=("Arial", 9, "bold"), width=15, height=2, bg="#3f6f91", command=lambda:show_area(root,session)).place(x=570,y=450)
     root.mainloop()
@@ -298,31 +301,34 @@ def show_area(parent=None,session=None):
     root.resizable(False,False)
     root.config(bg=BG1)
     #texto
-    Label(root, text="Escolha o espetáculo que queira ver", font=("Verdana", 16), background="#7dd1bf").grid(row=0, column=0, sticky=W)
+    Label(root, text="Escolha o espetáculo que queira ver", font=("Verdana", 16), background="#7dd1bf").grid(row=0, column=1, sticky=W)
     #separaçao
-    Label(root, text=" ", bg=BG1).grid(row=1, column=0)
+    Label(root, text=" ", bg=BG1).grid(row=1, column=1)
+    Label(root, text="", bg=BG1).grid(row=2, column=0)
     #List Box  
     #Create a scrollbar
     scrollbar = Scrollbar(root)
-    scrollbar.grid(row=2,column=0)
+    scrollbar.grid(row=2,column=2)
     #Create List Box
-    show_list_box = Listbox(root,yscrollcommand=scrollbar.set,width=30)
+    show_list_box = Listbox(root,yscrollcommand=scrollbar.set,width=100,height=20)
     for shows in controller.model.Show_List:
         show_list_box.insert(END, f"#{shows.getID()} - {shows.getShowName()} [{shows.getDate()}]")
-    show_list_box.grid(row=2,column=0,sticky=W)
+    show_list_box.grid(row=2,column=1,sticky=W)
     scrollbar.config(command=show_list_box.yview) #Join the scrollbar with the listbox
+    #separaçao
+    Label(root, text=" ", bg=BG1).grid(row=3, column=1)
     #Botão para redirecionar
-    Button(root, text="Ver Espetáculo", command=lambda:list_box_to_show(root,session,show_list_box),width=30, height=3, font=("Arial", 11, "bold"), bg="#2a9c83").grid(column=0, row=3,sticky=W)
+    Button(root, text="Ver Espetáculo", command=lambda:list_box_to_show(root,session,show_list_box),width=30, height=3, font=("Arial", 11, "bold"), bg="#2a9c83").grid(column=1, row=4)
     #Info do user
     if(session == None):
         Label(root,text="Sem sessão iniciada", font=("Arial", 9), justify="right", bg=BG1).place(x=570,y=430)
         Button(root,text="Iniciar Sessão",width=15,height=2, font=("Arial", 9, "bold"), background="#5cedce", command=lambda:login_page(root)).place(x=580,y=453)
     else:
-        Label(root, text=f"Bem-Vindo, {session.getFullName()}", font=("Arial", 9), justify="right", bg=BG1).place(x=510,y=10)
+        Label(root, text=f"Bem-Vindo, {session.getFullName()}", font=("Arial", 9), justify="right", bg=BG1).place(x=420,y=5)
         #botao espaço utilizador
         Button(root,text="Espaço do Utilizador",width=16,height=2, font=("Arial", 9, "bold"), background="#5cedce", command=lambda:user_area(root,session)).place(x=560,y=450)
         #encerrar sessao
-        Button(root,text="Encerrar Sessão",width=15,height=2, font=("Arial", 9, "bold"), background="red", command=lambda:show_area(root)).place(x=570,y=30)
+        Button(root,text="Encerrar Sessão",width=15,height=2, font=("Arial", 9, "bold"), background="red", command=lambda:show_area(root)).place(x=570,y=5)
     root.mainloop()
 
 #receives a list box and return the selected show
