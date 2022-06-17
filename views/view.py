@@ -156,8 +156,8 @@ def user_area(parent,session):
         Button(root, text="Ver Bilhete", command=lambda:list_box_to_reservation(root,session,reservation_list_box), width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=1, row=4)
     #Informação do utilizador
     #nome do user
+        Label(root, text=f"Total de reservas: {controller.get_user_total_price(session)}€", font=("Arial", 9), justify="right", bg=BG1).place(x=420,y=25)
     Label(root, text=f"Bem-Vindo, {session.getFullName()}", font=("Arial", 9), justify="right", bg=BG1).place(x=420,y=5)
-    Label(root, text=f"Total de reservas: 16,00€", font=("Arial", 9), justify="right", bg=BG1).place(x=420,y=25)
     #botao logout
     Button(root,text="Encerrar Sessão",width=15,height=2, font=("Arial", 9, "bold"), background="red", command=lambda:show_area(root)).place(x=570,y=5)
     #botao pagina principal

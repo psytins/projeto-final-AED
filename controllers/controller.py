@@ -266,3 +266,11 @@ def calculate_geometry(root,size:tuple):
     x = root.winfo_x()
     y = root.winfo_y()
     return str(curr_w)+"x"+str(curr_h)+"+"+str(x)+"+"+str(y) #string for Tk().geometry function only
+
+def get_user_total_price(user):
+    total = 0.0
+    for res in model.Reservation_List:
+        if(user.getID() == res.getUserID()):
+            total += float(res.getPrice())
+    
+    return format(total, '.2f')
