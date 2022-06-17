@@ -1,4 +1,5 @@
 from statistics import mode
+from typing import List
 import models.reservation as reservation
 import models.show as show
 import models.user as user
@@ -224,9 +225,9 @@ def create_show(show_name,show_date,show_description):
 def clear_show(show):
     for i in range(len(model.Show_List)):
         if(show.getID() == model.Show_List[i].getID()):
-            show_id = model.Show_List.pop(i)
+            deleted_show = model.Show_List.pop(i)
             break
-    return show_id #Return the deleted show
+    return deleted_show.getID() #Return the deleted show
 
 #Ver se é preciso passar estes parâmetros na função order_tickets
 # A partir do user id e show id temos acesso ao resto, não é preciso ter mais parâmetros
@@ -250,7 +251,14 @@ def clear_order(reservation, show, seat_number):
             show.setSeatOccupancy(seat_number, False) #Set the seat to empty
             break
     return reservation.getID()
-
+#Função para eliminar todas as reservas com o SHOW ID respectivo
+def clear_order_by_show_id(show_id):
+    obj_to_remove = list()
+    for res in model.Reservation_List:
+        if(show_id == res.getShowID()):
+            obj_to_remove.append(res)
+    model.Reservation_List = list(set(model.Reservation_List) - set(obj_to_remove))  #remove with sets
+            
 #Calculate where the window should appear, relative to the parent window
 def calculate_geometry(root,size:tuple):
     curr_w = size[0]

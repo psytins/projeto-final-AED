@@ -135,10 +135,6 @@ def user_area(parent,session):
         Label(root, text=" ", bg=BG1).grid(row=1, column=0)
         #botao para adicionar o espetaculo FAZER A FUNÇAO PARA ADICIONAR OS ESPETACULOS
         Button(root, text="Adicionar Espetáculo", width=30,height=3,command=lambda:create_show_page(root,session),font=("Arial", 11, "bold"), bg="#fdff85").grid(column=0, row=2, sticky=W)
-        #separaçao
-        Label(root, text=" ", bg=BG1).grid(row=3, column=0)
-        #botao para remover espetaculos
-        Button(root, text="Remover Espetáculo", width=30, height=3, font=("Arial", 11, "bold"), bg="#fdff85").grid(column=0, row=4, sticky=W)
     else:
         #texto
         Label(root, text="Escolha o bilhete", font=("Verdana", 16), background="#7eb6de").grid(row=0, column=0, sticky=W)
@@ -152,7 +148,7 @@ def user_area(parent,session):
         reservation_list_box = Listbox(root,yscrollcommand=scrollbar.set,width=30)
         for reservations in controller.model.Reservation_List:
             if(reservations.getUserID() == session.getID()):
-                reservation_list_box.insert(END, f"#{reservations.getID()} - {reservations.getShowName()} [{reservations.getSeatNumber()}]")
+                reservation_list_box.insert(END, f"#{reservations.getID()} - {reservations.getShowName()} [{reservations.getSeatNumber()}] - {reservations.getPrice()}€")
         reservation_list_box.grid(row=2,column=0,sticky=W)
         scrollbar.config(command=reservation_list_box.yview) #Join the scrollbar with the listbox
         Button(root, text="Ver Bilhete", command=lambda:list_box_to_reservation(root,session,reservation_list_box), width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=0, row=3)
@@ -221,7 +217,8 @@ def confirm_seat_change(parent,session,info_window,reservation,show,seat_number)
     show_room(parent,session,seat_change_window,show,seat_number)
     controller.clear_order(reservation,show,seat_number)
 
-def create_show_page(parent,session):
+def create_show_page(parent,session,show=None): #show parameter (receives a show object) is not none when the admin creates a show 
+                                                #through "add another date" button, in show info
     geometry = controller.calculate_geometry(parent,CREATE_SHOW_SIZE)
     root = Toplevel(parent)
     root.title("Criar espetáculo")
@@ -230,9 +227,9 @@ def create_show_page(parent,session):
     root.config(bg=BG2)
     Label(root, text="Insira as informações do espetáculo",font=("Verdana", 12),bg=BG2, padx=5,pady=5).place(x=10,y=10)
     #Show Name
-    label_show_name = StringVar()
     Label(root, text="Nome do Espetáculo", bg=BG2, padx=10,pady=10).place(x=10,y=40)
-    Entry(root,width=30,borderwidth=2,textvariable=label_show_name).place(x=200,y=50)
+    label_show_name = Entry(root,width=30,borderwidth=2)
+    label_show_name.place(x=200,y=50)
     #Date
     Label(root, text="Data do Espetáculo", bg=BG2, padx=10,pady=10).place(x=10,y=100)
     calendar = Calendar(root,selectmode='day',year=2022,month=1,day=1) #Create Calendar object
@@ -241,6 +238,11 @@ def create_show_page(parent,session):
     Label(root, text="Descrição do Espetáculo", bg=BG2, padx=10,pady=10).place(x=10,y=310)
     label_show_description = Text(root,height=5)
     label_show_description.place(x=200,y=320,width=190)
+    #Populate data if show is not none
+    if(show is not None):
+        label_show_name.insert(0,show.getShowName())
+        label_show_description.delete(1.0,"end") #Good practice -> erase all in Text Widget before insert new text
+        label_show_description.insert(1.0,show.getDescription())
     #Button
     Button(root,text="Adicionar Espetáculo",bg="#b2cadb",width=20,height=2,command=lambda:confirm_show_creation(parent,session,root,label_show_name.get(),calendar.get_date(),label_show_description.get("1.0",END))).place(x=10,y=450)
     Button(root,text="Cancelar",bg="#b2cadb",width=10,height=2,command=lambda:choice(root,"cancel")).place(x=200,y=450)
@@ -260,6 +262,17 @@ def confirm_show_creation(parent,session,window,show_name,show_date,show_descrip
         info_window.title(f"Espetáculo criado!")
         Label(info_window, text=f"O espetáculo {show_name}, foi criado!", font=("Arial", 12), bg=BG1).grid(row=0, column=0, sticky=W)
         Button(info_window, text="OK!", command = lambda: user_area(parent,session), bg="gray").grid(row=1, column=0)
+
+def confirm_show_deletion(parent,session,window,show):
+    geometry = controller.calculate_geometry(window,CONFIRM_ORDER_SIZE)
+    info_window = Toplevel(window)
+    info_window.geometry(geometry)
+    info_window.config(bg=BG1)
+    info_window.title(f"Espetáculo Eliminado!")
+    Label(info_window, text=f"O espetáculo {show.getShowName()}, foi eliminado!", font=("Arial", 12), bg=BG1).grid(row=0, column=0, sticky=W)
+    Button(info_window, text="OK!", command = lambda: user_area(parent,session), bg="gray").grid(row=1, column=0)
+    show_id = controller.clear_show(show)
+    controller.clear_order_by_show_id(show_id) #delete all related reservations
 
 #---------------------------------------------------
 #Opçoes na Window de info de bilhetes
@@ -322,7 +335,6 @@ def list_box_to_show(root,session,list_box):
                 curr_show = shows #Get respective show object
     else:
         curr_show = None #Show Object
-
     show_info(root,session,curr_show)
 
 #pop up da info de cada espetáculo - window
@@ -347,12 +359,12 @@ def show_info(parent,session,show):
         if(session == None):
             Label(info_window, text="Inicie sessão para reservar bilhetes", font=("Arial", 9), bg=BG1).grid(row=9, column=0, sticky=W)
         elif(session.isAdmin() == True):
-            show_room(parent,session,info_window,show) #Room will show with all buttons disabled
-            #Label(info_window, text="Adicionar uma nova data para este espetáculo ", bg=BG1).grid(row=19, column=0)
-            Button(info_window, text="Adicionar uma nova data para este espetáculo", bg="gray").grid(row=20, column=0)
+            show_room(parent,session,info_window,show)
+            Button(info_window, text="Adicionar uma nova data para este espetáculo", bg="gray",command=lambda:create_show_page(parent,session,show)).grid(row=20, column=0)
+            Button(info_window, text="Remover este espetáculo", bg="gray",command=lambda:confirm_show_deletion(parent,session,info_window,show)).grid(row=20, column=1)
         else:
             show_room(parent,session,info_window,show)
-        Button(info_window, text="Cancel", command = lambda: choice(info_window,"cancel"), bg="gray").grid(row=20, column=1)
+        Button(info_window, text="Cancel", command = lambda: choice(info_window,"cancel"), bg="gray").grid(row=21, column=1)
 
 def show_room(parent,session,info_window,show,seat_change=None): #Print the room in form of buttons
     room = show.getRoom()
@@ -364,14 +376,14 @@ def show_room(parent,session,info_window,show,seat_change=None): #Print the room
             seat_number = show.getSeatNumber((l,c))
             if(room[l][c] == "N0"):
                 if(session.isAdmin() == True):
-                    Button(info_window,text=" ",padx=16,pady=2,state=DISABLED).grid(column=c+5,row=l+5)
+                    Button(info_window,text=" ",padx=10,pady=2,state=DISABLED).grid(column=c+5,row=l+5)
                 else:
-                    Button(info_window,text=" ",padx=16,pady=2,command=lambda seat_number=seat_number:order(parent,session,info_window,seat_number,show)).grid(column=c+5,row=l+5)
+                    Button(info_window,text=" ",padx=10,pady=2,command=lambda seat_number=seat_number:order(parent,session,info_window,seat_number,show)).grid(column=c+5,row=l+5)
             elif(room[l][c] == "N1"):
                 if(seat_change is not None and show.getSeatNumber((l,c)) == seat_change): 
-                    Button(info_window,text=" ",bg='green',padx=16,pady=2,command=lambda seat_number=seat_number:order(parent,session,info_window,seat_number,show)).grid(column=c+5,row=l+5)
+                    Button(info_window,text=" ",bg='green',padx=10,pady=2,command=lambda seat_number=seat_number:order(parent,session,info_window,seat_number,show)).grid(column=c+5,row=l+5)
                 else:
-                    Button(info_window,text=" ",bg='red',padx=16,pady=2,state=DISABLED).grid(column=c+5,row=l+5)                
+                    Button(info_window,text=" ",bg='red',padx=10,pady=2,state=DISABLED).grid(column=c+5,row=l+5)                
             elif(room[l][c] == "V0"):
                 if(session.isAdmin() == True):
                     Button(info_window,text="VIP",padx=10,pady=2,state=DISABLED).grid(column=c+5,row=l+5)
@@ -379,9 +391,9 @@ def show_room(parent,session,info_window,show,seat_change=None): #Print the room
                     Button(info_window,text="VIP",padx=10,pady=2,command=lambda seat_number=seat_number:order(parent,session,info_window,seat_number,show)).grid(column=c+5,row=l+5)
             elif(room[l][c] == "V1"):
                 if(seat_change is not None and show.getSeatNumber((l,c)) == seat_change): 
-                    Button(info_window,text="VIP",bg='green',padx=16,pady=2,command=lambda seat_number=seat_number:order(parent,session,info_window,seat_number,show)).grid(column=c+5,row=l+5)
+                    Button(info_window,text="VIP",bg='green',padx=10,pady=2,command=lambda seat_number=seat_number:order(parent,session,info_window,seat_number,show)).grid(column=c+5,row=l+5)
                 else:
-                    Button(info_window,text="VIP",bg='red',padx=16,pady=2,state=DISABLED).grid(column=c+5,row=l+5)  
+                    Button(info_window,text="VIP",bg='red',padx=10,pady=2,state=DISABLED).grid(column=c+5,row=l+5)  
             elif(room[l][c] == "NA"):
                 pass
 
