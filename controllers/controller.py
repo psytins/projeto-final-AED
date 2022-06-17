@@ -213,6 +213,8 @@ def create_empty_show_room():
 
 #Função para criar espetaculos
 def create_show(show_name,show_date,show_description):
+    if(show_name == ""):
+        return -1 # Tem que dar um nome ao espetaculo
     show_id = create_show_id()
     room = create_empty_show_room()
     temp_show_obj = show.Show(show_id,show_name,show_date,show_description,room)

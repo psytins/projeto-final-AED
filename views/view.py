@@ -1,10 +1,13 @@
 from operator import indexOf
 from tkinter import *
+from turtle import width
+from tkcalendar import Calendar #Data picker
 import controllers.controller as controller
 #Window Settings ------------------------------------------------------------
 #Window Sizes --> Tuple : (x,y) 
 LOGIN_SIZE = (350,500) #Login Page
 REGISTER_SIZE = (350,500) #Register Page
+CREATE_SHOW_SIZE = (400,500) #Register Page
 USER_AREA_SIZE = (700,500) #User Area Page
 RESERVATION_INFO_SIZE = (500,200) #Reservation Info Page
 CONFIRM_CHANGE_SIZE = (1100,500) #Confirm Seat Change Page
@@ -131,7 +134,7 @@ def user_area(parent,session):
         #separação
         Label(root, text=" ", bg=BG1).grid(row=1, column=0)
         #botao para adicionar o espetaculo FAZER A FUNÇAO PARA ADICIONAR OS ESPETACULOS
-        Button(root, text="Adicionar Espetáculo", width=30, height=3, font=("Arial", 11, "bold"), bg="#fdff85").grid(column=0, row=2, sticky=W)
+        Button(root, text="Adicionar Espetáculo", width=30,height=3,command=lambda:create_show_page(root,session),font=("Arial", 11, "bold"), bg="#fdff85").grid(column=0, row=2, sticky=W)
         #separaçao
         Label(root, text=" ", bg=BG1).grid(row=3, column=0)
         #botao para remover espetaculos
@@ -217,6 +220,46 @@ def confirm_seat_change(parent,session,info_window,reservation,show,seat_number)
     Label(seat_change_window, text=f"Se deseja manter o seu lugar atual, clique no lugar a verde.", font=("Arial", 12), bg=BG1).grid(row=2, column=0, sticky=W)
     show_room(parent,session,seat_change_window,show,seat_number)
     controller.clear_order(reservation,show,seat_number)
+
+def create_show_page(parent,session):
+    geometry = controller.calculate_geometry(parent,CREATE_SHOW_SIZE)
+    root = Toplevel(parent)
+    root.title("Criar espetáculo")
+    root.geometry(geometry)
+    root.resizable(False,False)
+    root.config(bg=BG2)
+    Label(root, text="Insira as informações do espetáculo",font=("Verdana", 12),bg=BG2, padx=5,pady=5).place(x=10,y=10)
+    #Show Name
+    label_show_name = StringVar()
+    Label(root, text="Nome do Espetáculo", bg=BG2, padx=10,pady=10).place(x=10,y=40)
+    Entry(root,width=30,borderwidth=2,textvariable=label_show_name).place(x=200,y=50)
+    #Date
+    Label(root, text="Data do Espetáculo", bg=BG2, padx=10,pady=10).place(x=10,y=100)
+    calendar = Calendar(root,selectmode='day',year=2022,month=1,day=1) #Create Calendar object
+    calendar.place(x=190,y=100,width=200,height=190)
+    #Show Description
+    Label(root, text="Descrição do Espetáculo", bg=BG2, padx=10,pady=10).place(x=10,y=310)
+    label_show_description = Text(root,height=5)
+    label_show_description.place(x=200,y=320,width=190)
+    #Button
+    Button(root,text="Adicionar Espetáculo",bg="#b2cadb",width=20,height=2,command=lambda:confirm_show_creation(parent,session,root,label_show_name.get(),calendar.get_date(),label_show_description.get("1.0",END))).place(x=10,y=450)
+    Button(root,text="Cancelar",bg="#b2cadb",width=10,height=2,command=lambda:choice(root,"cancel")).place(x=200,y=450)
+    root.mainloop()
+
+def confirm_show_creation(parent,session,window,show_name,show_date,show_description):
+    controll = controller.create_show(show_name,show_date,show_description) #Create show and add it to the show list
+    geometry = controller.calculate_geometry(window,CONFIRM_ORDER_SIZE)
+    info_window = Toplevel(window)
+    info_window.geometry(geometry)
+    info_window.config(bg=BG1)
+    if(controll == -1):
+        info_window.title(f"Erro")
+        Label(info_window, text=f"Tem que dar um nome ao espetaculo!", font=("Arial", 12), bg=BG1).grid(row=0, column=0, sticky=W)
+        Button(info_window, text="OK!", command = lambda: user_area(parent,session), bg="gray").grid(row=1, column=0)
+    elif(controll != -1):
+        info_window.title(f"Espetáculo criado!")
+        Label(info_window, text=f"O espetáculo {show_name}, foi criado!", font=("Arial", 12), bg=BG1).grid(row=0, column=0, sticky=W)
+        Button(info_window, text="OK!", command = lambda: user_area(parent,session), bg="gray").grid(row=1, column=0)
 
 #---------------------------------------------------
 #Opçoes na Window de info de bilhetes
