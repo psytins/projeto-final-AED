@@ -3,6 +3,7 @@ from operator import indexOf
 from tkinter import *
 from tkinter.messagebox import showinfo, showwarning #Pop up message box
 from tkcalendar import Calendar #Data picker
+import datetime as dt
 import controllers.controller as controller
 #Window Settings ------------------------------------------------------------
 #Window Sizes --> Tuple : (x,y) 
@@ -29,9 +30,9 @@ def autenticate_user(parent,email,password,admin):
     elif(auth == -1):
         Label(parent, text="A palavra passe está incorreta",pady=10,fg="red",bg=BG2,width=35,anchor=W).place(x=10,y=200)
     elif(auth == -2):
-        Label(parent, text="Tem que preencher todos os espaços",pady=10,fg="red",bg=BG2,anchor=W).place(x=10,y=200)
+        Label(parent, text="É favor preencher todos os campos",pady=10,fg="red",bg=BG2,anchor=W).place(x=10,y=200)
     elif(auth == -3):
-        Label(parent, text="O utilizador não é administrador",pady=10,fg="red",bg=BG2,anchor=W).place(x=10,y=200)
+        Label(parent, text="Acesso interdito",pady=10,fg="red",bg=BG2,anchor=W,width=35).place(x=10,y=200)
     else:
         user_area(parent,auth)
 
@@ -43,15 +44,15 @@ def login_page(parent):
     root.geometry(geometry)
     root.resizable(False,False)
     root.config(bg=BG2)
-    Label(root, text="Bem-vindo ao Show Time!", bg=BG2, padx=10,pady=10).place(x=10,y=10)
+    Label(root,text="Bem-vindo ao Show Time!",bg=BG2,padx=10,pady=10).place(x=10,y=10)
     #Email
     user_email = StringVar()
-    Label(root, text="Email", bg=BG2, padx=10,pady=10).place(x=10,y=50)
+    Label(root,text="Email",bg=BG2,padx=10,pady=10).place(x=10,y=50)
     Entry(root,width=30,borderwidth=2,textvariable=user_email).place(x=100,y=50)
     #Password
     user_password = StringVar()
-    Label(root, text="Password", bg=BG2, padx=10,pady=10).place(x=10,y=100)
-    Entry(root,width=30,borderwidth=2, textvariable=user_password, show="*").place(x=100,y=100)
+    Label(root,text="Password",bg=BG2,padx=10,pady=10).place(x=10,y=100)
+    Entry(root,width=30,borderwidth=2,textvariable=user_password,show="*").place(x=100,y=100)
     #Button
     Button(root,text="Entrar",bg="#b2cadb",width=10,height=2,command=lambda:autenticate_user(root,user_email.get(),user_password.get(),False)).place(x=10,y=150)
     Button(root,text="Registar",bg="#b2cadb",width=10,height=2,command=lambda:register_page(root)).place(x=265,y=150)
@@ -67,14 +68,14 @@ def login_page_admin(parent):
     root.geometry(geometry)
     root.resizable(False,False)
     root.config(bg=BG2)
-    Label(root, text="Bem-vindo Administrador!", bg=BG2, padx=10,pady=10).place(x=10,y=10)
+    Label(root,text="Bem-vindo Administrador!",bg=BG2,padx=10,pady=10).place(x=10,y=10)
     #Email
     user_email = StringVar()
-    Label(root, text="Email", bg=BG2, padx=10,pady=10).place(x=10,y=50)
+    Label(root,text="Email",bg=BG2,padx=10,pady=10).place(x=10,y=50)
     Entry(root,width=30,borderwidth=2,textvariable=user_email).place(x=100,y=50)
     #Password
     user_password = StringVar()
-    Label(root, text="Password", bg=BG2, padx=10,pady=10).place(x=10,y=100)
+    Label(root,text="Password", bg=BG2,padx=10,pady=10).place(x=10,y=100)
     Entry(root,width=30,borderwidth=2, textvariable=user_password, show="*").place(x=100,y=100)
     #Button
     Button(root,text="Entrar",bg="#b2cadb",width=10,height=2,command=lambda:autenticate_user(root,user_email.get(),user_password.get(),True)).place(x=10,y=150)
@@ -87,9 +88,9 @@ def registrate_user(parent,email,name,password):
     if(control == 0): 
         Label(parent, text="O email já existe",pady=10,fg="red",bg=BG2,anchor=W).place(x=10,y=250)
     elif(control == -1):
-        Label(parent, text="Tem que preencher todos os espaços",pady=10,fg="red",bg=BG2,anchor=W).place(x=10,y=250)
+        Label(parent, text="É favor preencher todos os campos",pady=10,fg="red",bg=BG2,anchor=W).place(x=10,y=250)
     else:
-        showinfo("Email registado com sucesso",f"Bem-vindo {name} ao Show Time!\n\nAgora pode ter acesso livre à reserva de bilhetes para os seus espetáculos preferidos.")
+        showinfo("Email registado com sucesso",f"Bem-vindo {name} ao Show Time!\n\nJá pode ter acesso livre à reserva de bilhetes para os seus espetáculos preferidos.")
         user_area(parent,control)
 
 def register_page(parent): 
@@ -138,7 +139,7 @@ def user_area(parent,session):
         Button(root, text="Adicionar Espetáculo", width=30,height=3,command=lambda:create_show_page(root,session),font=("Arial", 11, "bold"), bg="#fdff85").grid(column=1, row=2, sticky=W)
     else:
         #texto
-        Label(root, text="Escolha o bilhete", font=("Verdana", 16), background="#7eb6de").grid(row=0, column=1, sticky=W)
+        Label(root, text="A sua lista de reservas", font=("Verdana", 16), background="#7eb6de").grid(row=0, column=1, sticky=W)
         #separaçao
         Label(root, text=" ", bg=BG1).grid(row=1, column=0)
         Label(root, text=" ", bg=BG1).grid(row=1, column=1)
@@ -155,11 +156,11 @@ def user_area(parent,session):
         scrollbar.config(command=reservation_list_box.yview) #Join the scrollbar with the listbox
         #separaçao
         Label(root, text=" ", bg=BG1).grid(row=3, column=1)
-        Button(root, text="Ver Bilhete", command=lambda:list_box_to_reservation(root,session,reservation_list_box), width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=1, row=4)
+        Button(root, text="Consultar reserva", command=lambda:list_box_to_reservation(root,session,reservation_list_box), width=30, height=3, font=("Arial", 11, "bold"), bg="#3d9adb").grid(column=1, row=4)
     #Informação do utilizador
     #nome do user
         Label(root, text=f"Total de reservas: {controller.get_user_total_price(session)}€", font=("Arial", 9), justify="right", bg=BG1).place(x=400,y=25)
-    Label(root, text=f"Bem-Vindo, {session.getFullName()}", font=("Arial", 9), justify="right", bg=BG1).place(x=400,y=5)
+    Label(root, text=f"Bem-Vindo {session.getFullName()}", font=("Arial", 9), justify="right", bg=BG1).place(x=400,y=5)
     #botao logout
     Button(root,text="Encerrar Sessão",width=15,height=2, font=("Arial", 9, "bold"), background="red", command=lambda:show_area(root)).place(x=570,y=5)
     #botao pagina principal
@@ -253,15 +254,15 @@ def create_show_page(parent,session,show=None): #show parameter (receives a show
 def confirm_show_creation(parent,toplevel_window,session,show_name,show_date,show_description):
     controll = controller.create_show(show_name,show_date,show_description) #Create show and add it to the show list
     if(controll == -1):
-        showwarning("Erro!","Tem que dar um nome ao espetaculo!",parent=toplevel_window)
+        showwarning("Erro!","Dê o nome ao espetáculo!",parent=toplevel_window)
     elif(controll != -1):
-        showinfo("Espetáculo criado!",f"O espetáculo {show_name}, foi criado!",parent=toplevel_window)
+        showinfo("Espetáculo inserido!",f'O espetáculo "{show_name}" foi inserido!',parent=toplevel_window)
         show_area(parent,session)
 
 def confirm_show_deletion(parent,toplevel_window,session,show):
     show_id = controller.clear_show(show)
     controller.clear_order_by_show_id(show_id) #delete all related reservations
-    showinfo("Espetáculo Eliminado!",f"O espetáculo {show.getShowName()}, foi eliminado!",parent=toplevel_window)
+    showinfo("Espetáculo removido!",f'O espetáculo "{show.getShowName()}" foi removido!',parent=toplevel_window)
     show_area(parent,session)
 
 #---------------------------------------------------
@@ -288,7 +289,7 @@ def show_area(parent=None,session=None):
     root.resizable(False,False)
     root.config(bg=BG1)
     #texto
-    Label(root, text="Escolha o espetáculo que queira ver", font=("Verdana", 16), background="#7dd1bf").grid(row=0, column=1, sticky=W)
+    Label(root, text="Espetáculos Disponíveis", font=("Verdana", 16), background="#7dd1bf").grid(row=0, column=1, sticky=W)
     #separaçao
     Label(root, text=" ", bg=BG1).grid(row=1, column=1)
     Label(root, text="", bg=BG1).grid(row=2, column=0)
@@ -299,19 +300,20 @@ def show_area(parent=None,session=None):
     #Create List Box
     show_list_box = Listbox(root,yscrollcommand=scrollbar.set,width=100,height=20)
     for shows in controller.model.Show_List:
-        show_list_box.insert(END, f"#{shows.getID()} - {shows.getShowName()} na data {shows.getDate()} com {math.ceil((shows.getSeatCount()/shows.getFullCapacity())*100)}% de lotação")
+        show_list_box.insert(END, f"#{shows.getID()} - {shows.getShowName()} na data {shows.getDate()} com {math.ceil((shows.getSeatCount()/shows.getFullCapacity())*100)}% de ocupação")
     show_list_box.grid(row=2,column=1,sticky=W)
     scrollbar.config(command=show_list_box.yview) #Join the scrollbar with the listbox
     #separaçao
     Label(root, text=" ", bg=BG1).grid(row=3, column=1)
     #Botão para redirecionar
-    Button(root, text="Ver Espetáculo", command=lambda:list_box_to_show(root,session,show_list_box),width=30, height=3, font=("Arial", 11, "bold"), bg="#2a9c83").grid(column=1, row=4)
+    Button(root, text="Consultar espetáculo", command=lambda:list_box_to_show(root,session,show_list_box),width=30, height=3, font=("Arial", 11, "bold"), bg="#2a9c83").grid(column=1, row=4)
     #Info do user
     if(session == None):
         Label(root,text="Sem sessão iniciada", font=("Arial", 9), justify="right", bg=BG1).place(x=570,y=430)
         Button(root,text="Iniciar Sessão",width=15,height=2, font=("Arial", 9, "bold"), background="#5cedce", command=lambda:login_page(root)).place(x=580,y=453)
     else:
-        Label(root, text=f"Bem-Vindo, {session.getFullName()}", font=("Arial", 9), justify="right", bg=BG1).place(x=400,y=5)
+        Label(root, text=f"Bem-Vindo {session.getFullName()}", font=("Arial", 9), justify="right", bg=BG1).place(x=400,y=5)
+        Label(root, text=f"Data de hoje: {dt.datetime.now():%d/%m/%y}", font=("Arial", 9), justify="right", bg=BG1).place(x=400,y=25)
         #botao espaço utilizador
         Button(root,text="Espaço do Utilizador",width=16,height=2,wraplength=100,font=("Arial", 9, "bold"), background="#5cedce", command=lambda:user_area(root,session)).place(x=560,y=450)
         #encerrar sessao
@@ -359,7 +361,7 @@ def show_info(parent,session,show):
             show_room(parent,session,info_window,show)
         Button(info_window,text="Voltar",width=10,height=2,command=lambda:choice(info_window,"cancel"),bg="gray").place(x=10,y=450)
     else:
-        showinfo("Informação","Por favor selecione um espetáculo, ou aguarde por novos espetáculo.")
+        showinfo("Informação","Por favor selecione um espetáculo, ou aguarde por novos espetáculos.")
 
 def show_room(parent,session,info_window,show,seat_change=None): #Print the room in form of buttons
     room = show.getRoom()
@@ -416,4 +418,4 @@ def confirm_order(parent,toplevel_window,session,seat_number,show):
 def main():
     controller.start()
     show_area()
-    #controller.save()
+    controller.save()
