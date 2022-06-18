@@ -19,6 +19,9 @@ class Show(object):
         if(self.getSeatCount() == 142): return True
         else: return False
 
+    def getFullCapacity(self):
+        return 142
+
     def getDescription(self):
         return self.description
 
