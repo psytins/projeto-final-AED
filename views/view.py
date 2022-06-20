@@ -15,7 +15,7 @@ RESERVATION_INFO_SIZE = (500,200) #Reservation Info Page
 CONFIRM_CHANGE_SIZE = (1100,500) #Confirm Seat Change Page
 SHOW_AREA_SIZE = (700,500) #Show Area Page 
 SHOW_INFO_SIZE = (900,500) #Show Info Page 
-ORDER_SIZE = (500,200) #Order Page
+ORDER_SIZE = (600,200) #Order Page
 #Window Colors
 BG1 = "#a3a3a3"
 BG2="#d1d1d1"
