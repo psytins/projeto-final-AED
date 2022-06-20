@@ -1,6 +1,5 @@
 import math
 from operator import indexOf
-from sqlite3 import adapt
 from tkinter import *
 from tkinter.messagebox import showinfo, showwarning #Pop up message box
 from tkcalendar import Calendar #Data picker
