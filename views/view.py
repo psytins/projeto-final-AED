@@ -157,7 +157,7 @@ def user_area(parent,session):
             if datetime.strptime(shows.getDate()[6:10],"%y").strftime("%Y") not in dates_year_list:
                 dates_year_list.append(datetime.strptime(shows.getDate()[6:10],"%y").strftime("%Y")) #To show e.g 2022 instead of 22
         Label(root,bg="#ff8c42",height=21,width=31).place(x=5,y=50)
-        Label(root, text="Ver total de vendas por",font=("Verdana",12,"bold"),bg="#ff8c42",fg="white").place(x=8,y=60)
+        Label(root, text="Ver total de vendas",font=("Verdana",12,"bold"),bg="#ff8c42",fg="white").place(x=8,y=60)
         #Sales by Day -----------
         if(len(dates_day_list) != 0): default_date_day.set(dates_day_list[0])       
         else: 
