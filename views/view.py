@@ -126,9 +126,11 @@ def admin_panel(parent,type,info): #type is "d" or "m" or "y"
     if(type=="d"):
         Label(parent, text=f"{controller.get_day_total_price(info)}€",fg="white",bg="#ff8c42",font=("Verdana", 12,"bold"),width=5).place(x=10,y=120)
     elif(type=="m"):
-        Label(parent, text=f"{controller.get_month_total_price(info)}€",fg="white",bg="#ff8c42",font=("Verdana", 12,"bold"),width=5).place(x=10,y=215)
+        updated_info = datetime.strptime(info,"%B").strftime("%m") #Pass e.g January to 01
+        Label(parent, text=f"{controller.get_month_total_price(updated_info)}€",fg="white",bg="#ff8c42",font=("Verdana", 12,"bold"),width=5).place(x=10,y=215)
     elif(type=="y"):
-        Label(parent, text=f"{controller.get_year_total_price(info)}€",fg="white",bg="#ff8c42",font=("Verdana", 12,"bold"),width=5).place(x=10,y=310)
+        updated_info = datetime.strptime(info,"%Y").strftime("%y") #Pass e.g 2022 to 22
+        Label(parent, text=f"{controller.get_year_total_price(updated_info)}€",fg="white",bg="#ff8c42",font=("Verdana", 12,"bold"),width=5).place(x=10,y=310)
 
 def user_area(parent,session):
     geometry = controller.calculate_geometry(parent,USER_AREA_SIZE)
@@ -158,21 +160,30 @@ def user_area(parent,session):
         Label(root,bg="#ff8c42",height=21,width=31).place(x=5,y=50)
         Label(root, text="Ver total de vendas por",font=("Verdana",12,"bold"),bg="#ff8c42",fg="white").place(x=8,y=60)
         #Sales by Day -----------
-        default_date_day.set(dates_day_list[0])       
+        if(len(dates_day_list) != 0): default_date_day.set(dates_day_list[0])       
+        else: 
+            dates_day_list.append("Sem datas")
+            default_date_day.set("Sem datas")    
         Label(root, text="Por Dia",fg="white",bg="#ff8c42",font=("Verdana",9)).place(x=10,y=100)
         Label(root, text="0.00€",fg="white",bg="#ff8c42",font=("Verdana", 12,"bold"),width=5).place(x=10,y=120)
         OptionMenu(root,default_date_day,*dates_day_list).place(x=10,y=145)
         Button(root, text="Atualizar",command=lambda:admin_panel(root,"d",default_date_day.get()),width=7,height=1,bg="#fff275").place(x=150,y=145)
         #--------
         #Sales by Month -----------
-        default_date_month.set(dates_month_list[0])
+        if(len(dates_month_list) != 0): default_date_month.set(dates_month_list[0])
+        else: 
+            dates_month_list.append("Sem datas")
+            default_date_month.set("Sem datas")    
         Label(root, text="Por Mês",fg="white",bg="#ff8c42",font=("Verdana",9)).place(x=10,y=195)
         Label(root, text="0.00€",fg="white",bg="#ff8c42",font=("Verdana", 12,"bold"),width=5).place(x=10,y=215)
         OptionMenu(root,default_date_month,*dates_month_list).place(x=10,y=240)
         Button(root, text="Atualizar",command=lambda:admin_panel(root,"m",default_date_month.get()),width=7,height=1,bg="#fff275").place(x=150,y=240)
         #--------
         #Sales by Year -----------
-        default_date_year.set(dates_year_list[0])
+        if(len(dates_year_list) != 0): default_date_year.set(dates_year_list[0])
+        else: 
+            dates_year_list.append("Sem datas")
+            default_date_year.set("Sem datas")  
         Label(root, text="Por Ano",fg="white",bg="#ff8c42",font=("Verdana",9)).place(x=10,y=290)
         Label(root, text="0.00€",fg="white",bg="#ff8c42",font=("Verdana", 12,"bold"),width=5).place(x=10,y=310)
         OptionMenu(root,default_date_year,*dates_year_list).place(x=10,y=335)
