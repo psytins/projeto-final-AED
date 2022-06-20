@@ -1,5 +1,3 @@
-from statistics import mode
-from typing import List
 import models.reservation as reservation
 import models.show as show
 import models.user as user
@@ -274,3 +272,12 @@ def get_user_total_price(user):
             total += float(res.getPrice())
     
     return format(total, '.2f')
+
+def get_all_users():
+    return len(model.User_List) - 1 # minus one, because of the administrator account
+
+def get_all_shows():
+    return len(model.Show_List)
+
+def get_all_reservations():
+    return len(model.Reservation_List)

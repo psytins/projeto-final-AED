@@ -1,9 +1,10 @@
 import math
 from operator import indexOf
+from sqlite3 import adapt
 from tkinter import *
 from tkinter.messagebox import showinfo, showwarning #Pop up message box
 from tkcalendar import Calendar #Data picker
-import datetime as dt
+from datetime import *
 import controllers.controller as controller
 #Window Settings ------------------------------------------------------------
 #Window Sizes --> Tuple : (x,y) 
@@ -57,7 +58,7 @@ def login_page(parent):
     Button(root,text="Entrar",bg="#b2cadb",width=10,height=2,command=lambda:autenticate_user(root,user_email.get(),user_password.get(),False)).place(x=10,y=150)
     Button(root,text="Registar",bg="#b2cadb",width=10,height=2,command=lambda:register_page(root)).place(x=265,y=150)
     Button(root,text="Voltar",bg="#a19c9c",command=lambda:show_area(root), width=10,height=2).place(x=10,y=450)
-    Button(root,text="Entrar como Administrador",bg="#dadb86",height=2,command=lambda:login_page_admin(root)).place(x=190,y=450)
+    Button(root,text="Entrar como Administrador",bg="#fff275",height=2,command=lambda:login_page_admin(root)).place(x=190,y=450)
     root.mainloop()
 
 def login_page_admin(parent):
@@ -131,12 +132,57 @@ def user_area(parent,session):
     root.config(bg=BG1)
     if session.isAdmin() == True:
         #texto
-        Label(root, text="Ferramentas de Administrador", font=("Verdana", 16), bg="#fdff3d").grid(row=0, column=1, sticky=W)
-        #separação
-        Label(root, text=" ", bg=BG1).grid(row=1, column=0)
+        Label(root, text="Ferramentas de Administrador", font=("Verdana", 16), bg="#fff275").place(x=5,y=5)
+        #Admin Panel
+        #Get dates - Day
+        dates_day_list = list()
+        dates_month_list = list()
+        dates_year_list = list()
+        default_date_day = StringVar()
+        default_date_month = StringVar()
+        default_date_year = StringVar()
+        for shows in controller.model.Show_List:
+            if shows.getDate() not in dates_day_list:
+                dates_day_list.append(shows.getDate())
+            if datetime.strptime(shows.getDate()[3:5],"%m").strftime("%B") not in dates_month_list:
+                dates_month_list.append(datetime.strptime(shows.getDate()[3:5],"%m").strftime("%B")) #To show e.g January instead of 01
+            if datetime.strptime(shows.getDate()[6:10],"%y").strftime("%Y") not in dates_year_list:
+                dates_year_list.append(datetime.strptime(shows.getDate()[6:10],"%y").strftime("%Y")) #To show e.g 2022 instead of 22
+        Label(root,bg="#ff8c42",height=21,width=31).place(x=5,y=50)
+        Label(root, text="Ver total de vendas por",font=("Verdana",12,"bold"),bg="#ff8c42",fg="white").place(x=8,y=60)
+        #Sales by Day -----------
+        default_date_day.set(dates_day_list[0])       
+        Label(root, text="Por Dia",fg="white",bg="#ff8c42",font=("Verdana",9)).place(x=10,y=100)
+        Label(root, text="456€",fg="white",bg="#ff8c42",font=("Verdana", 12,"bold")).place(x=10,y=120)
+        OptionMenu(root,default_date_day,*dates_day_list).place(x=10,y=145)
+        Button(root, text="Atualizar", width=7,height=1,bg="#fff275").place(x=150,y=145)
+        #--------
+        #Sales by Month -----------
+        default_date_month.set(dates_month_list[0])
+        Label(root, text="Por Mês",fg="white",bg="#ff8c42",font=("Verdana",9)).place(x=10,y=195)
+        Label(root, text="456€",fg="white",bg="#ff8c42",font=("Verdana", 12,"bold")).place(x=10,y=215)
+        OptionMenu(root,default_date_month,*dates_month_list).place(x=10,y=240)
+        Button(root, text="Atualizar", width=7,height=1,bg="#fff275").place(x=150,y=240)
+        #--------
+        #Sales by Year -----------
+        default_date_year.set(dates_year_list[0])
+        Label(root, text="Por Ano",fg="white",bg="#ff8c42",font=("Verdana",9)).place(x=10,y=290)
+        Label(root, text="456€",fg="white",bg="#ff8c42",font=("Verdana", 12,"bold")).place(x=10,y=310)
+        OptionMenu(root,default_date_year,*dates_year_list).place(x=10,y=335)
+        Button(root, text="Atualizar", width=7,height=1,bg="#fff275").place(x=150,y=335)
+        #--------
+        #User Number -----------
+        Label(root,bg="#6c8ead",height=10,width=31).place(x=250,y=50)
+        Label(root, text="Utilizadores Registados",font=("Verdana",12,"bold"),bg="#6c8ead",fg="white").place(x=258,y=60)     
+        Label(root, text=f"{controller.get_all_users()}",fg="white",bg="#6c8ead",font=("Verdana", 18)).place(x=260,y=90)
+        #--------
+        #Show Number -----------
+        Label(root,bg="#a23e48",height=10,width=31).place(x=250,y=214)
+        Label(root, text="Reservas Registadas",font=("Verdana",12,"bold"),bg="#a23e48",fg="white").place(x=258,y=224)   
+        Label(root, text=f"{controller.get_all_reservations()}",fg="white",bg="#a23e48",font=("Verdana", 18)).place(x=260,y=254)
+        #--------
         #botao para adicionar o espetaculo FAZER A FUNÇAO PARA ADICIONAR OS ESPETACULOS
-        Label(root, text=" ", bg=BG1).grid(row=1, column=0)
-        Button(root, text="Adicionar Espetáculo", width=30,height=3,command=lambda:create_show_page(root,session),font=("Arial", 11, "bold"), bg="#fdff85").grid(column=1, row=2, sticky=W)
+        Button(root, text="Adicionar Espetáculo", width=30,height=3,command=lambda:create_show_page(root,session),font=("Arial", 11, "bold"), bg="#fff275").place(x=10,y=425)
     else:
         #texto
         Label(root, text="A sua lista de reservas", font=("Verdana", 16), background="#7eb6de").grid(row=0, column=1, sticky=W)
@@ -199,7 +245,7 @@ def reservation_info(parent,session,reservation):
         Label(info_window, text=" ", bg=BG1).grid(row=5, column=0)
         Button(info_window, text="Alterar Lugar", command = lambda: confirm_seat_change(parent,info_window,session,reservation,curr_show,reservation.getSeatNumber()), bg="gray").grid(row=6, column=2)
         Button(info_window, text="Reembolsar", command = lambda: confirm_refund(parent,info_window,session,reservation,curr_show,reservation.getSeatNumber()), bg="gray").grid(row=6, column=3)
-        Button(info_window, text="Cancel", command = lambda: choice(info_window,"cancel"), bg="gray").grid(row=6, column=4)
+        Button(info_window, text="Cancelar", command = lambda: choice(info_window,"cancel"), bg="gray").grid(row=6, column=4)
     else:
         showinfo("Informação","Por favor selecione uma reserva, ou reserve um bilhete na área dos espetáculos.")
 
@@ -313,7 +359,7 @@ def show_area(parent=None,session=None):
         Button(root,text="Iniciar Sessão",width=15,height=2, font=("Arial", 9, "bold"), background="#5cedce", command=lambda:login_page(root)).place(x=580,y=453)
     else:
         Label(root, text=f"Bem-Vindo {session.getFullName()}", font=("Arial", 9), justify="right", bg=BG1).place(x=400,y=5)
-        Label(root, text=f"Data de hoje: {dt.datetime.now():%d/%m/%y}", font=("Arial", 9), justify="right", bg=BG1).place(x=400,y=25)
+        Label(root, text=f"Data de hoje: {datetime.now():%d/%m/%y}", font=("Arial", 9), justify="right", bg=BG1).place(x=400,y=25)
         #botao espaço utilizador
         Button(root,text="Espaço do Utilizador",width=16,height=2,wraplength=100,font=("Arial", 9, "bold"), background="#5cedce", command=lambda:user_area(root,session)).place(x=560,y=450)
         #encerrar sessao
