@@ -1,3 +1,4 @@
+from datetime import date
 import models.reservation as reservation
 import models.show as show
 import models.user as user
@@ -272,6 +273,22 @@ def get_user_total_price(user):
             total += float(res.getPrice())
     
     return format(total, '.2f')
+
+def get_day_total_price(day):
+    total = 0.0
+
+    for shows in model.Show_List:
+        if(shows.getDate() == day):
+            for res in model.Reservation_List:
+                if(shows.getID() == res.getShowID()):
+                    total += float(res.getPrice())
+    return format(total, '.2f')
+
+def get_month_total_price(month):
+    pass
+
+def get_year_total_price(year):
+    pass
 
 def get_all_users():
     return len(model.User_List) - 1 # minus one, because of the administrator account

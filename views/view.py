@@ -122,6 +122,14 @@ def register_page(parent):
     root.mainloop()
 #------------------------------------------------------------------------------------------------------------------------
 # USER AREA -----------------------------------------
+def admin_panel(parent,type,info): #type is "d" or "m" or "y"
+    if(type=="d"):
+        Label(parent, text=f"{controller.get_day_total_price(info)}€",fg="white",bg="#ff8c42",font=("Verdana", 12,"bold"),width=5).place(x=10,y=120)
+    elif(type=="m"):
+        Label(parent, text=f"{controller.get_month_total_price(info)}€",fg="white",bg="#ff8c42",font=("Verdana", 12,"bold"),width=5).place(x=10,y=215)
+    elif(type=="y"):
+        Label(parent, text=f"{controller.get_year_total_price(info)}€",fg="white",bg="#ff8c42",font=("Verdana", 12,"bold"),width=5).place(x=10,y=310)
+
 def user_area(parent,session):
     geometry = controller.calculate_geometry(parent,USER_AREA_SIZE)
     parent.destroy()
@@ -131,7 +139,6 @@ def user_area(parent,session):
     root.resizable(False,False)
     root.config(bg=BG1)
     if session.isAdmin() == True:
-        #texto
         Label(root, text="Ferramentas de Administrador", font=("Verdana", 16), bg="#fff275").place(x=5,y=5)
         #Admin Panel
         #Get dates - Day
@@ -153,23 +160,23 @@ def user_area(parent,session):
         #Sales by Day -----------
         default_date_day.set(dates_day_list[0])       
         Label(root, text="Por Dia",fg="white",bg="#ff8c42",font=("Verdana",9)).place(x=10,y=100)
-        Label(root, text="456€",fg="white",bg="#ff8c42",font=("Verdana", 12,"bold")).place(x=10,y=120)
+        Label(root, text="0.00€",fg="white",bg="#ff8c42",font=("Verdana", 12,"bold"),width=5).place(x=10,y=120)
         OptionMenu(root,default_date_day,*dates_day_list).place(x=10,y=145)
-        Button(root, text="Atualizar", width=7,height=1,bg="#fff275").place(x=150,y=145)
+        Button(root, text="Atualizar",command=lambda:admin_panel(root,"d",default_date_day.get()),width=7,height=1,bg="#fff275").place(x=150,y=145)
         #--------
         #Sales by Month -----------
         default_date_month.set(dates_month_list[0])
         Label(root, text="Por Mês",fg="white",bg="#ff8c42",font=("Verdana",9)).place(x=10,y=195)
-        Label(root, text="456€",fg="white",bg="#ff8c42",font=("Verdana", 12,"bold")).place(x=10,y=215)
+        Label(root, text="0.00€",fg="white",bg="#ff8c42",font=("Verdana", 12,"bold"),width=5).place(x=10,y=215)
         OptionMenu(root,default_date_month,*dates_month_list).place(x=10,y=240)
-        Button(root, text="Atualizar", width=7,height=1,bg="#fff275").place(x=150,y=240)
+        Button(root, text="Atualizar",command=lambda:admin_panel(root,"m",default_date_month.get()),width=7,height=1,bg="#fff275").place(x=150,y=240)
         #--------
         #Sales by Year -----------
         default_date_year.set(dates_year_list[0])
         Label(root, text="Por Ano",fg="white",bg="#ff8c42",font=("Verdana",9)).place(x=10,y=290)
-        Label(root, text="456€",fg="white",bg="#ff8c42",font=("Verdana", 12,"bold")).place(x=10,y=310)
+        Label(root, text="0.00€",fg="white",bg="#ff8c42",font=("Verdana", 12,"bold"),width=5).place(x=10,y=310)
         OptionMenu(root,default_date_year,*dates_year_list).place(x=10,y=335)
-        Button(root, text="Atualizar", width=7,height=1,bg="#fff275").place(x=150,y=335)
+        Button(root,text="Atualizar",command=lambda:admin_panel(root,"y",default_date_year.get()),width=7,height=1,bg="#fff275").place(x=150,y=335)
         #--------
         #User Number -----------
         Label(root,bg="#6c8ead",height=10,width=31).place(x=250,y=50)
